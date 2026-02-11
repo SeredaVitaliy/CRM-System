@@ -1,7 +1,12 @@
 export default function TabButton({ children, onSelect }) {
   return (
     <li>
-      <button onClick={onSelect}>{children}</button>
+      <button
+        style={{ backgroundColor: "blue", border: "none" }}
+        onClick={onSelect}
+      >
+        {children}
+      </button>
     </li>
   );
 }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Form({ onUpdate }) {
+export default function Form({ onUpdate}) {
   const [title, setTitle] = useState("");
   const [errorValid, setErrorValid] = useState("");
 
@@ -22,9 +22,22 @@ export default function Form({ onUpdate }) {
 
     //добавление задачи
     const newTask = { title, isDone: false };
+    //
+    //1 await addTask
+      const responseTask = await addTask(newTask);
 
+      // const allTasks = await getTasks();
     onUpdate(newTask);
 
+    //сделать запрос на бэк
+    //почитать - разница умные и тупые компоненты (presintation components, pure comp)
+
+    // 2 - код создания задачи - обновить список задач
+
+    // onAddItems(newTask);
+    // console.log(updateTaskList);
+    // console.log(newTask);
+    // setItems(allTasks);
     setTitle("");
   }
   return (
