@@ -22,34 +22,57 @@ export default function Item({ task, editingTask, onDeleteTask, onToggle }) {
     setEditTaskTitle(e.target.value);
   }
 
-  let editableTaskTitle = <span>{editTaskTitle}</span>;
+  let editableTaskTitle = editTaskTitle;
 
   if (isEdit) {
-    editableTaskTitle = <input value={editTaskTitle} onChange={handleChange} />;
+    editableTaskTitle = (
+      <input
+        className="form form-edit"
+        value={editTaskTitle}
+        onChange={handleChange}
+      />
+    );
   }
 
   // console.log(editTaskTitle);
   // console.log(setEditTaskTitle)
   return (
-    <li>
-      <input
-        type="checkbox"
-        checked={task.isDone}
-        onChange={() => onToggle(task.isDone, task.id)}
-      />
-      <span style={task.isDone ? { textDecoration: "line-through" } : {}}>
-        {editableTaskTitle}
-      </span>
-      {isEdit ? (
-        <>
-          <button onClick={handleSaveClick}>Сохранить</button>
-          <button onClick={handleReturnClick}>Отмена</button>
-        </>
-      ) : (
-        <button onClick={handleEditClick}>Изменить</button>
-      )}
+    <li className="tasks">
+      <div className="checkbox">
+        <input
+          className="checkbox-input"
+          type="checkbox"
+          checked={task.isDone}
+          onChange={() => onToggle(task.isDone, task.id)}
+        />
 
-      {isEdit ? "" : <button onClick={() => onDeleteTask(task.id)}>x</button>}
+        <span style={task.isDone ? { textDecoration: "line-through" } : {}}>
+          {editableTaskTitle}
+        </span>
+      </div>
+      <div style={{ display: "flex" }}>
+        {isEdit ? (
+          <div style={{ display: "grid", gap: "5px" }}>
+            <button className="btn btn-save-res" onClick={handleSaveClick}>
+              Сохранить
+            </button>
+            <button className="btn btn-save-res" onClick={handleReturnClick}>
+              Отмена
+            </button>
+          </div>
+        ) : (
+          <button className="btn btn-edit" onClick={handleEditClick}></button>
+        )}
+
+        {isEdit ? (
+          ""
+        ) : (
+          <button
+            className="btn btn-del"
+            onClick={() => onDeleteTask(task.id)}
+          ></button>
+        )}
+      </div>
     </li>
   );
 }

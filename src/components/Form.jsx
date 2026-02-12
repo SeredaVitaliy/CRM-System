@@ -28,9 +28,10 @@ export default function Form({ onUpdate }) {
     setTitle("");
   }
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <>
+      <form onSubmit={handleSubmit} style={{ display: "flex" }}>
         <input
+          className="form form-add"
           type="text"
           placeholder="Task To Be Done..."
           value={title}
@@ -38,11 +39,11 @@ export default function Form({ onUpdate }) {
           onChange={(e) => setTitle(e.target.value)}
           maxLength={64}
         />
+        <button className="btn btn-add">Add</button>
         {errorValid && (
           <p style={{ color: "red", fontSize: "10px" }}>{errorValid}</p>
         )}
-        <button>Add</button>
       </form>
-    </div>
+    </>
   );
 }

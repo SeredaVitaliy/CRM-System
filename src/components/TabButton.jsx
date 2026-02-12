@@ -1,8 +1,8 @@
-export default function TabButton({ children, onSelect }) {
+export default function TabButton({ children, onSelect, isSelected }) {
   return (
     <li>
       <button
-        style={{ backgroundColor: "blue", border: "none" }}
+        className={isSelected ? "tabs tabs--active" : "tabs"}
         onClick={onSelect}
       >
         {children}

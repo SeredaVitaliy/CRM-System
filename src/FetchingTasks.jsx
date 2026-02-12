@@ -2,14 +2,14 @@ export async function fetchingTasks() {
   const res = await fetch("https://easydev.club/api/v1/todos");
   const data = await res.json();
 
-  return data.data;
+  return data;
 }
 
 export async function fetchingTasksFilter(filter) {
   const res = await fetch(`https://easydev.club/api/v1/todos?filter=${filter}`);
   const data = await res.json();
 
-  return data.data;
+  return data;
 }
 
 export async function addTask(task) {

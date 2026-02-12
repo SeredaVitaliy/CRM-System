@@ -16,6 +16,8 @@ export function App() {
   //tasks
   const [tasks, setTasks] = useState([]); // передаются в форму и используется для вывода в айтемЛист
 
+  const [counter, setCounter] = useState("");
+
   async function handleAddTask(task) {
     // const responseTask =
     await addTask(task);
@@ -98,12 +100,16 @@ export function App() {
   async function fetchTabs(tabContent) {
     if (tabContent === "all") {
       const response = await fetchingTasks();
-      setTasks(response);
+      setTasks(response.data);
+      setCounter(response.info);
+      console.log(counter);
     }
     if (tabContent !== "all") {
       const response = await fetchingTasksFilter(tabContent);
-      setTasks(response);
+      setTasks(response.data);
+      setCounter(response.info);
       console.log(response);
+      console.log(counter);
     }
   }
 
@@ -124,18 +130,31 @@ export function App() {
     (tabContent === "all" && tasks);
 */
   return (
-    <div>
+    <div className="todo-container">
       <Form onUpdate={handleAddTask} />
-      <menu style={{ display: "flex", gap: "5px" }}>
-        <TabButton onSelect={() => handleSelectTab("all")}>Все(x)</TabButton>
-        <TabButton onSelect={() => handleSelectTab("inWork")}>
-          в работе(х)
+      <menu
+        style={{ display: "flex", justifyContent: "space-between", gap: "5px" }}
+      >
+        <TabButton
+          isSelected={tabContent === "all"}
+          onSelect={() => handleSelectTab("all")}
+        >
+          Все ({counter.all})
         </TabButton>
-        <TabButton onSelect={() => handleSelectTab("completed")}>
-          сделано(х)
+        <TabButton
+          isSelected={tabContent === "inWork"}
+          onSelect={() => handleSelectTab("inWork")}
+        >
+          в работе ({counter.inWork})
         </TabButton>
-        {/* {tabContent} */}
+        <TabButton
+          isSelected={tabContent === "completed"}
+          onSelect={() => handleSelectTab("completed")}
+        >
+          сделано ({counter.completed})
+        </TabButton>
       </menu>
+      {/* {tabContent} */}
       <ItemList
         tasks={tasks}
         editingTask={handleEditTaskTitle}
@@ -153,7 +172,7 @@ export default function ItemList({
   onToggle,
 }) {
   return (
-    <ul>
+    <ul style={{ display: "grid" }}>
       {tasks.map((task) => (
         <Item
           task={task}
