@@ -8,13 +8,16 @@ export default function InputTask({ onUpdate }) {
     e.preventDefault();
 
     //валидация
-    if (
-      !title ||
-      title.trim().length === 0 ||
-      title.length < 2 ||
-      title.length >= 64
-    ) {
-      setErrorValid("данное поле должно содержать от 2 до 64 символов");
+    if (!title || title.trim().length === 0) {
+      setErrorValid("Это поле не может быть пустым");
+      return setTitle("");
+    }
+    if (title.length < 2) {
+      setErrorValid("Минимальная длина текста 2 символа");
+      return setTitle("");
+    }
+    if (title.length >= 64) {
+      setErrorValid("Максимальная длина текста 64 символа");
       return setTitle("");
     } else {
       setErrorValid("");
@@ -29,7 +32,7 @@ export default function InputTask({ onUpdate }) {
   }
   return (
     <>
-      <form onSubmit={handleSubmit} style={{ display: "flex" }}>
+      <form onSubmit={handleSubmit} style={{ display: "flex" }} noValidate>
         <input
           className="form form-add"
           type="text"
