@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Form({ onUpdate }) {
+export default function InputTask({ onUpdate }) {
   const [title, setTitle] = useState("");
   const [errorValid, setErrorValid] = useState("");
 
@@ -20,7 +20,7 @@ export default function Form({ onUpdate }) {
       setErrorValid("");
     }
 
-    //добавление задачи
+    //  добавление задачи
     const newTask = { title, isDone: false };
 
     onUpdate(newTask);
@@ -40,10 +40,18 @@ export default function Form({ onUpdate }) {
           maxLength={64}
         />
         <button className="btn btn-add">Add</button>
-        {errorValid && (
-          <p style={{ color: "red", fontSize: "10px" }}>{errorValid}</p>
-        )}
       </form>
+      {errorValid && (
+        <p
+          style={{
+            color: "red",
+            fontSize: "10px",
+            marginLeft: "50px",
+          }}
+        >
+          {errorValid}
+        </p>
+      )}
     </>
   );
 }

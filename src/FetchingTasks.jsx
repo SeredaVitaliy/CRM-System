@@ -46,10 +46,10 @@ export async function deleteTask(id) {
 }
 
 //редактирование тайтла задачи
-export async function fetchEditTitleTask(newTaskTitle, id) {
+export async function fetchEditTask(editTask, id) {
   const res = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
     method: "PUT",
-    body: JSON.stringify(newTaskTitle),
+    body: JSON.stringify(editTask),
     headers: {
       "Content-Type": "application/json",
     },
