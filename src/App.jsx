@@ -5,7 +5,7 @@ import {
   fetchEditTask,
   fetchingTasks,
   fetchingTasksFilter,
-} from "./FetchingTasks";
+} from "./api/FetchingTasks";
 import TabButton from "./components/TabButton";
 import TasksList from "./components/TasksList";
 import InputTask from "./components/InputTask";
@@ -17,40 +17,60 @@ export function App() {
   const [counter, setCounter] = useState("");
 
   async function handleAddTask(task) {
-    await addTask(task);
-    await fetchTabs(tabContent);
+    try {
+      await addTask(task);
+      await fetchTabs(tabContent);
 
-    console.log(tasks);
+      console.log(tasks);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   //Редактирование задачи
   async function handleEditTaskTitle(newTaskTitle, id) {
-    await fetchEditTask({ title: newTaskTitle }, id);
+    try {
+      await fetchEditTask({ title: newTaskTitle }, id);
 
-    await fetchTabs(tabContent);
+      await fetchTabs(tabContent);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   //удаление задачи
   async function handleDeletedTask(id) {
-    await deleteTask(id);
+    try {
+      await deleteTask(id);
 
-    await fetchTabs(tabContent);
+      await fetchTabs(tabContent);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   //сравнение для чекбокса - для фильтрации
   async function handleToggleTask(isDone, id) {
-    await fetchEditTask({ isDone: !isDone }, id);
+    try {
+      await fetchEditTask({ isDone: !isDone }, id);
 
-    await fetchTabs(tabContent);
+      await fetchTabs(tabContent);
 
-    console.log(tabContent);
+      console.log(tabContent);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   // отправка запроса на сервер, чтобы получить список задач с сервера
   useEffect(
     function () {
       async function fetchTasks() {
-        await fetchTabs(tabContent);
+        try {
+          await fetchTabs(tabContent);
+        } catch (error) {
+          console.error(error);
+        }
       }
       fetchTasks();
     },
@@ -66,17 +86,22 @@ export function App() {
 
   //функция для обновления состояния при табах
   async function fetchTabs(tabContent) {
-    if (tabContent === "all") {
-      const response = await fetchingTasks();
-      setTasks(response.data);
-      setCounter(response.info);
-      console.log(counter);
-    } else {
-      const response = await fetchingTasksFilter(tabContent);
-      setTasks(response.data);
-      setCounter(response.info);
-      console.log(response);
-      console.log(counter);
+    try {
+      if (tabContent === "all") {
+        const response = await fetchingTasks();
+        setTasks(response.data);
+        setCounter(response.info);
+        console.log(counter);
+      } else {
+        const response = await fetchingTasksFilter(tabContent);
+
+        setTasks(response.data);
+        setCounter(response.info);
+        console.log(response);
+        console.log(counter);
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
 
