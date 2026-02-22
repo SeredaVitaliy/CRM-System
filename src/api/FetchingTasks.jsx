@@ -1,28 +1,13 @@
-export async function fetchingTasks() {
+export async function getTasks(filter) {
   try {
-    const response = await fetch("https://easydev.club/api/v1/todos");
-    const data = await response.json();
+    filter = filter === "all" ? null : filter;
+    let request = filter ? "?filter=" + filter : "";
+    const response = await fetch("https://easydev.club/api/v1/todos" + request);
 
     if (!response.ok) {
       throw new Error("не удалось получить данные");
     }
 
-    return data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-
-export async function fetchingTasksFilter(filter) {
-  try {
-    const response = await fetch(
-      `https://easydev.club/api/v1/todos?filter=${filter}`,
-    );
-
-    if (!response.ok) {
-      throw new Error("не удалось получить данные");
-    }
     const data = await response.json();
 
     return data;
@@ -49,19 +34,6 @@ export async function addTask(task) {
 
     console.log(resData);
     return resData;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-
-//получение айди задачи
-export async function getTaskId(id) {
-  try {
-    const response = await fetch(`https://easydev.club/api/v1/todos/${id}`);
-    const data = await response.json();
-
-    return data.id;
   } catch (error) {
     console.error(error);
     throw error;

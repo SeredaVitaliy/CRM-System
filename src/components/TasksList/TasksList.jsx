@@ -1,4 +1,5 @@
-import TaskItem from "./TaskItem";
+import TaskItem from "../TaskItem/TaskItem";
+import styles from "./TasksList.module.css";
 
 export default function TasksList({
   tasks,
@@ -7,7 +8,7 @@ export default function TasksList({
   onToggle,
 }) {
   return (
-    <ul style={{ display: "grid" }}>
+    <ul className={styles.TaskList}>
       {tasks.map((task) => (
         <TaskItem
           task={task}

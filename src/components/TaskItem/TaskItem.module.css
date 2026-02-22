@@ -1,0 +1,19 @@
+.btnEdit {
+  background-image: url("/src/assets/Group.svg");
+  background-color: var(--color-accent);
+}
+
+.btnDel {
+  background-image: url("/src/assets/Vector.svg");
+  background-color: var(--color-red);
+}
+
+.btnSave {
+  background-color: var(--color-accent);
+  background-image: url("/src/assets/ok.svg");
+}
+
+.btnRes {
+  background-color: var(--color-accent);
+  background-image: url("/src/assets/del.svg");
+}
