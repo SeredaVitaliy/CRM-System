@@ -1,3 +1,4 @@
 .taskList {
   display: grid;
+  border: none;
 }

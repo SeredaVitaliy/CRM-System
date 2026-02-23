@@ -2,8 +2,8 @@
   border: none;
   background-position: center;
   border-radius: 10px;
-  margin-left: 10px;
-  color: #fff;
+  margin-left: 7px;
+  color: var(--color-white);
   background-repeat: no-repeat;
   width: 60px;
   height: 50px;

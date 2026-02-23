@@ -3,5 +3,5 @@
   background-position: center;
   border-radius: 10px;
   margin-left: 10px;
-  color: #fff;
+  color: var(--color-white);
 }

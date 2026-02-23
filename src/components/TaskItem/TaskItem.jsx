@@ -2,6 +2,7 @@ import { useState } from "react";
 import styles from "./TaskItem.module.css";
 import CheckBox from "../../ui/CheckBox/CheckBox";
 import IconButton from "../../ui/IconButton/IconButton";
+import titleValidation from "../../utils/validator";
 
 export default function TaskItem({
   task,
@@ -11,11 +12,21 @@ export default function TaskItem({
 }) {
   const [isEdit, setIsEdit] = useState(false); // стейт для редактирования
   const [editTaskTitle, setEditTaskTitle] = useState(task.title);
+  const [errorValid, setErrorValid] = useState("");
 
   function handleSubmitClick(e) {
     e.preventDefault();
-    editingTask(editTaskTitle, task.id);
+
+    const validation = titleValidation(editTaskTitle.trim());
+
+    if (validation) {
+      setErrorValid(validation);
+      return;
+    }
+
+    editingTask(editTaskTitle.trim(), task.id);
     setIsEdit(false);
+    setErrorValid("");
   }
 
   function handleEditClick() {
@@ -25,6 +36,7 @@ export default function TaskItem({
   function handleReturnClick() {
     setEditTaskTitle(task.title);
     setIsEdit(false);
+    setErrorValid("");
   }
 
   function handleChange(e) {
@@ -32,49 +44,51 @@ export default function TaskItem({
   }
 
   return (
-    <li className="tasks">
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "5px",
-        }}
-      >
+    <li className={styles.tasksItem}>
+      <div className={styles.taskMain}>
         <CheckBox
           type="checkbox"
           checked={task.isDone}
           onChange={() => onToggle(task.isDone, task.id)}
         />
 
-        <span style={task.isDone ? { textDecoration: "line-through" } : {}}>
+        <>
           {isEdit ? (
-            <form
-              onSubmit={handleSubmitClick}
-              style={{ display: "grid", gap: "5px" }}
-            >
-              <input
-                className="form form-edit"
-                value={editTaskTitle}
-                onChange={handleChange}
-              />
-              <IconButton
-                ariaLabel="save"
-                className={styles.btnSave}
-              ></IconButton>
-              <IconButton
-                type="button"
-                ariaLabel="return"
-                className={styles.btnRes}
-                onClick={handleReturnClick}
-              ></IconButton>
+            <form onSubmit={handleSubmitClick} className={styles.editInput}>
+              <div className={styles.editTitle}>
+                <input
+                  className={styles.formEdit}
+                  value={editTaskTitle}
+                  onChange={handleChange}
+                />
+                <p className={styles.errorText}>{errorValid}</p>
+              </div>
+
+              <div className={styles.editButtons}>
+                <IconButton
+                  type="submit"
+                  ariaLabel="save"
+                  className={styles.btnSave}
+                ></IconButton>
+                <IconButton
+                  type="button"
+                  ariaLabel="return"
+                  className={styles.btnRes}
+                  onClick={handleReturnClick}
+                ></IconButton>
+              </div>
             </form>
           ) : (
-            task.title
+            <span
+              className={task.isDone ? styles.taskIsDone : styles.taskTitle}
+            >
+              {task.title}
+            </span>
           )}
-        </span>
+        </>
       </div>
-      <div style={{ display: "flex" }}>
+
+      <div className={styles.initialButtons}>
         {!isEdit && (
           <IconButton
             ariaLabel="edit"

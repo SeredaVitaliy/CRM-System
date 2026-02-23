@@ -1,20 +1,27 @@
+.container {
+  display: flex;
+}
+
 .form {
   border: none;
   padding: 17px;
-  /* max-width: 100%; */
-  color: #000000;
+  color: var(--color-black);
   font-size: 15px;
   display: flex;
 }
 
 .formAdd {
-  background-color: #edeaea0e;
-  margin-left: 45px;
-  width: 220px;
-  border-bottom: 2px solid #808080;
+  background-color: var(--color-black-shadow);
+  width: 100%;
+  border-bottom: 2px solid var(--color-gray-tabs);
 }
 
 .btnAdd {
   background-color: var(--color-accent);
   padding: 18px 50px;
+}
+
+.textError {
+  color: var(--color-red);
+  font-size: 10px;
 }

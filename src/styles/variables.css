@@ -1,7 +1,11 @@
 :root {
   --color-accent: #2074e9;
   --color-red: #ea5b53;
+  --color-white: #fff;
+  --color-black: #000;
 
   --color-gray-1: #edeaea;
   --color-gray-tabs: #808080;
+  --color-gray-edit: #e6e5e5;
+  --color-black-shadow: #edeaea0e;
 }

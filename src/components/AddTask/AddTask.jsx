@@ -12,7 +12,7 @@ export default function AddTask({ onUpdate }) {
     e.preventDefault();
 
     //валидация
-    const validation = titleValidation(title);
+    const validation = titleValidation(title.trim());
     if (validation) {
       setErrorValid(validation);
       return;
@@ -32,7 +32,7 @@ export default function AddTask({ onUpdate }) {
   }
   return (
     <>
-      <form onSubmit={handleSubmit} style={{ display: "flex" }} noValidate>
+      <form onSubmit={handleSubmit} className={styles.container} noValidate>
         <input
           className={`${styles.form} ${styles.formAdd}`}
           type="text"
@@ -42,17 +42,7 @@ export default function AddTask({ onUpdate }) {
         />
         <Button className={styles.btnAdd}>Add</Button>
       </form>
-      {errorValid && (
-        <p
-          style={{
-            color: "red",
-            fontSize: "10px",
-            marginLeft: "50px",
-          }}
-        >
-          {errorValid}
-        </p>
-      )}
+      {errorValid && <p className={styles.textError}>{errorValid}</p>}
     </>
   );
 }

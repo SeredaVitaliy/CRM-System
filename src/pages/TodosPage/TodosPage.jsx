@@ -1,15 +1,10 @@
 import { useEffect, useState } from "react";
-import {
-  //   addTask,
-  deleteTask,
-  fetchEditTask,
-  //   fetchingTasksFilter,
-  getTasks,
-} from "../api/fetchingTasks";
+import { deleteTask, fetchEditTask, getTasks } from "../../api/fetchingTasks";
 
-import TasksList from "../components/TasksList/TasksList";
-import AddTask from "../components/AddTask/AddTask";
-import TabButtons from "../components/TabButtons/TabButtons";
+import styles from "./TodosPage.module.css";
+import TasksList from "../../components/TasksList/TasksList";
+import AddTask from "../../components/AddTask/AddTask";
+import TabButtons from "../../components/TabButtons/TabButtons";
 
 export function TodosPage() {
   const [selectedTab, setSelectedTab] = useState("all");
@@ -96,18 +91,13 @@ export function TodosPage() {
   }
 
   return (
-    <div className="todo-container">
+    <div className={styles.container}>
       <AddTask onUpdate={handleAddTask} />
-      <menu
-        style={{ display: "flex", justifyContent: "space-between", gap: "5px" }}
-      >
-        <TabButtons
-          selectedTab={selectedTab}
-          todoInfo={todoInfo}
-          onSelectedTab={handleSelectTab}
-        />
-      </menu>
-      {/* {tabContent} */}
+      <TabButtons
+        selectedTab={selectedTab}
+        todoInfo={todoInfo}
+        onSelectedTab={handleSelectTab}
+      />
       <TasksList
         tasks={tasks}
         editingTask={handleEditTaskTitle}

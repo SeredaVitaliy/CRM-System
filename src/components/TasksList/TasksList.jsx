@@ -8,7 +8,7 @@ export default function TasksList({
   onToggle,
 }) {
   return (
-    <ul className={styles.TaskList}>
+    <ul className={styles.taskList}>
       {tasks.map((task) => (
         <TaskItem
           task={task}

@@ -14,6 +14,81 @@
 }
 
 .btnRes {
-  background-color: var(--color-accent);
+  background-color: var(--color-red);
   background-image: url("/src/assets/del.svg");
+}
+
+.tasksItem {
+  border: none;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-black);
+  max-width: 100%;
+  background-color: var(--color-white);
+  align-items: center;
+}
+
+.taskMain {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex: 1;
+  min-width: 0;
+}
+
+.taskTitle {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.taskIsDone {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-decoration: line-through;
+}
+
+.formEdit {
+  background-color: var(--color-gray-edit);
+  width: 100%;
+  border-radius: 10px;
+  border: none;
+  padding: 6px 10px;
+}
+
+.errorText {
+  color: var(--color-red);
+  font-size: 10px;
+}
+
+.editTitle {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 5px;
+  flex: 1;
+  min-width: 0;
+}
+
+.initialButtons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.editButtons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.editInput {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  width: 100%;
 }
