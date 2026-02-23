@@ -31,6 +31,7 @@ export default function TaskItem({
 
   function handleEditClick() {
     setIsEdit((editing) => !editing);
+    setErrorValid("");
   }
 
   function handleReturnClick() {
@@ -52,57 +53,55 @@ export default function TaskItem({
           onChange={() => onToggle(task.isDone, task.id)}
         />
 
-        <>
-          {isEdit ? (
-            <form onSubmit={handleSubmitClick} className={styles.editInput}>
-              <div className={styles.editTitle}>
-                <input
-                  className={styles.formEdit}
-                  value={editTaskTitle}
-                  onChange={handleChange}
-                />
-                <p className={styles.errorText}>{errorValid}</p>
-              </div>
+        {isEdit && (
+          <form onSubmit={handleSubmitClick} className={styles.editInput}>
+            <div className={styles.editTitle}>
+              <input
+                className={styles.formEdit}
+                value={editTaskTitle}
+                onChange={handleChange}
+              />
+              {errorValid && <p className={styles.errorText}>{errorValid}</p>}
+            </div>
 
-              <div className={styles.editButtons}>
-                <IconButton
-                  type="submit"
-                  ariaLabel="save"
-                  className={styles.btnSave}
-                ></IconButton>
-                <IconButton
-                  type="button"
-                  ariaLabel="return"
-                  className={styles.btnRes}
-                  onClick={handleReturnClick}
-                ></IconButton>
-              </div>
-            </form>
-          ) : (
+            <div className={styles.editButtons}>
+              <IconButton
+                type="submit"
+                ariaLabel="save"
+                className={styles.btnSave}
+              ></IconButton>
+              <IconButton
+                type="button"
+                ariaLabel="return"
+                className={styles.btnRes}
+                onClick={handleReturnClick}
+              ></IconButton>
+            </div>
+          </form>
+        )}
+
+        {!isEdit && (
+          <>
             <span
               className={task.isDone ? styles.taskIsDone : styles.taskTitle}
             >
               {task.title}
             </span>
-          )}
-        </>
-      </div>
 
-      <div className={styles.initialButtons}>
-        {!isEdit && (
-          <IconButton
-            ariaLabel="edit"
-            className={styles.btnEdit}
-            onClick={handleEditClick}
-          ></IconButton>
-        )}
+            <div className={styles.initialButtons}>
+              <IconButton
+                ariaLabel="edit"
+                className={styles.btnEdit}
+                onClick={handleEditClick}
+              ></IconButton>
 
-        {!isEdit && (
-          <IconButton
-            ariaLabel="delete"
-            className={styles.btnDel}
-            onClick={() => onDeleteTask(task.id)}
-          ></IconButton>
+              <IconButton
+                ariaLabel="delete"
+                className={styles.btnDel}
+                onClick={() => onDeleteTask(task.id)}
+              ></IconButton>
+            </div>
+          </>
         )}
       </div>
     </li>
