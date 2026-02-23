@@ -26,7 +26,7 @@ export default function AddTask({ onUpdate }) {
 
       setTitle("");
     } catch (error) {
-      console.error(error);
+      alert(error);
       setErrorValid(error.message);
     }
   }

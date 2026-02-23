@@ -15,8 +15,6 @@ export function TodosPage() {
   async function handleAddTask() {
     try {
       await fetchTabs(selectedTab);
-
-      console.log(tasks);
     } catch (error) {
       alert(error);
     }
@@ -75,8 +73,6 @@ export function TodosPage() {
   //Табы
   function handleSelectTab(selectedButton) {
     setSelectedTab(selectedButton);
-
-    console.log(selectedButton);
   }
 
   //функция для обновления состояния при табах
