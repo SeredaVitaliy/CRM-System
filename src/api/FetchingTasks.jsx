@@ -1,8 +1,9 @@
 export async function getTasks(filter) {
   try {
-    filter = filter === "all" ? null : filter;
-    let request = filter ? "?filter=" + filter : "";
-    const response = await fetch("https://easydev.club/api/v1/todos" + request);
+    const actualFilter = filter === "all" ? null : filter;
+    const query = actualFilter ? "?filter=" + actualFilter : "";
+    const fullUrl = "https://easydev.club/api/v1/todos" + query;
+    const response = await fetch(fullUrl);
 
     if (!response.ok) {
       throw new Error("не удалось получить данные");

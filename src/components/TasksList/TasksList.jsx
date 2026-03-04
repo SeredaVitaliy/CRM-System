@@ -3,8 +3,9 @@ import styles from "./TasksList.module.css";
 
 export default function TasksList({
   tasks,
+  onUpdate,
   editingTask,
-  onDeleteTask,
+  // onDeleteTask,
   onToggle,
 }) {
   return (
@@ -13,8 +14,9 @@ export default function TasksList({
         <TaskItem
           task={task}
           key={task.id}
+          onUpdate={onUpdate}
           editingTask={editingTask}
-          onDeleteTask={onDeleteTask}
+          // onDeleteTask={onDeleteTask}
           onToggle={onToggle}
         />
       ))}

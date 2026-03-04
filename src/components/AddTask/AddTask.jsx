@@ -12,9 +12,9 @@ export default function AddTask({ onUpdate }) {
     e.preventDefault();
 
     //валидация
-    const validation = titleValidation(title.trim());
-    if (validation) {
-      setErrorValid(validation);
+    const errorMessage = titleValidation(title.trim());
+    if (errorMessage) {
+      setErrorValid(errorMessage);
       return;
     }
     //  добавление задачи
@@ -40,7 +40,7 @@ export default function AddTask({ onUpdate }) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        <Button className={styles.btnAdd}>Add</Button>
+        <Button variant="primary">Add</Button>
       </form>
       {errorValid && <p className={styles.textError}>{errorValid}</p>}
     </>
