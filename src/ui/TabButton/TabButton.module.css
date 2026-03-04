@@ -1,0 +1,13 @@
+.tabs {
+  text-decoration: none;
+  border: none;
+  color: var(--color-gray-tabs);
+  background-color: inherit;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.tabs--active {
+  text-decoration: underline;
+  color: var(--color-accent);
+}

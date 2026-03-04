@@ -1,0 +1,6 @@
+.tabsButtons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin: 20px 0 5px 0;
+}

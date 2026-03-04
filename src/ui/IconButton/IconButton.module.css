@@ -1,0 +1,30 @@
+.iconBtn {
+  border: none;
+  background-position: center;
+  border-radius: 10px;
+  margin-left: 6px;
+  color: var(--color-white);
+  background-repeat: no-repeat;
+  width: 60px;
+  height: 50px;
+}
+
+.edit {
+  background-image: url("/src/assets/Group.svg");
+  background-color: var(--color-accent);
+}
+
+.delete {
+  background-image: url("/src/assets/Vector.svg");
+  background-color: var(--color-red);
+}
+
+.save {
+  background-color: var(--color-accent);
+  background-image: url("/src/assets/ok.svg");
+}
+
+.return {
+  background-color: var(--color-red);
+  background-image: url("/src/assets/del.svg");
+}

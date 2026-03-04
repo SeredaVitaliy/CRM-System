@@ -1,0 +1,38 @@
+.checkbox {
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkbox input {
+  appearance: none;
+  position: relative;
+  width: 18px;
+  height: 18px;
+  background: var(--color-white);
+  border-radius: 10px;
+  border: 1px solid var(--color-black);
+  cursor: pointer;
+}
+
+.checkbox input::after {
+  content: "";
+  position: absolute;
+  width: 0px;
+  height: 0px;
+  background-color: var(--color-accent);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='16' viewBox='0 -960 960 960' width='16' stroke='%23FFFFFF' stroke-width='30' fill='%23FFFFFF'%3E%3Cpath d='M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  border-radius: 50%;
+}
+
+.checkbox input:checked::after {
+  width: 16px;
+  height: 16px;
+}
+
+.checkbox input:disabled {
+  border-color: var(--color-black);
+}

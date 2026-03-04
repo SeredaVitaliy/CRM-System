@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+}
+
+.form {
+  border: none;
+  padding: 18px;
+  color: var(--color-black);
+  font-size: 16px;
+  display: flex;
+}
+
+.formAdd {
+  background-color: var(--color-black-shadow);
+  width: 100%;
+  border-bottom: 2px solid var(--color-gray-tabs);
+}
+
+.textError {
+  color: var(--color-red);
+  font-size: 10px;
+}
