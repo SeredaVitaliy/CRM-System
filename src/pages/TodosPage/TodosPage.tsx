@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { getTasks } from "../../api/fetchingTasks";
+import { getTasks } from "../../api/FetchingTasks.ts";
 
 import styles from "./TodosPage.module.css";
-import TasksList from "../../components/TasksList/TasksList";
-import AddTask from "../../components/AddTask/AddTask";
-import TabButtons from "../../components/TabButtons/TabButtons";
+import TasksList from "../../components/TasksList/TasksList.tsx";
+import AddTask from "../../components/AddTask/AddTask.tsx";
+import TabButtons from "../../components/TabButtons/TabButtons.tsx";
 
 export function TodosPage() {
   const [selectedTab, setSelectedTab] = useState("all");

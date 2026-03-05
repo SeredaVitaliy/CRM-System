@@ -1,8 +1,8 @@
 import { useState } from "react";
 import styles from "./AddTask.module.css";
-import { addTask } from "../../api/fetchingTasks";
-import titleValidation from "../../utils/validator";
-import Button from "../../ui/Button/Button";
+import { addTask } from "../../api/FetchingTasks.ts";
+import titleValidation from "../../utils/validator.ts";
+import Button from "../../ui/Button/Button.js";
 
 export default function AddTask({ onUpdate }) {
   const [title, setTitle] = useState("");

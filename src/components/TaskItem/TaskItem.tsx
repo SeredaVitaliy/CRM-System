@@ -1,9 +1,9 @@
 import { useState } from "react";
 import styles from "./TaskItem.module.css";
-import CheckBox from "../../ui/CheckBox/CheckBox";
-import IconButton from "../../ui/IconButton/IconButton";
-import titleValidation from "../../utils/validator";
-import { deleteTask, fetchEditTask } from "../../api/fetchingTasks";
+import CheckBox from "../../ui/CheckBox/CheckBox.tsx";
+import IconButton from "../../ui/IconButton/IconButton.tsx";
+import titleValidation from "../../utils/validator.ts";
+import { deleteTask, fetchEditTask } from "../../api/FetchingTasks.ts";
 
 export default function TaskItem({ task, onUpdate }) {
   const [isEdit, setIsEdit] = useState(false); // стейт для редактирования
