@@ -3,7 +3,7 @@ import styles from "./TaskItem.module.css";
 import CheckBox from "../../ui/CheckBox/CheckBox.tsx";
 import IconButton from "../../ui/IconButton/IconButton.tsx";
 import titleValidation from "../../utils/validator.ts";
-import { deleteTask, fetchEditTask } from "../../api/FetchingTasks.ts";
+import { deleteTask, fetchEditTask } from "../../api/TodoApi.ts";
 
 export default function TaskItem({ task, onUpdate }) {
   const [isEdit, setIsEdit] = useState(false); // стейт для редактирования

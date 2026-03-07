@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getTasks } from "../../api/FetchingTasks.ts";
+import { getTasks } from "../../api/TodoApi.ts";
 
 import styles from "./TodosPage.module.css";
 import TasksList from "../../components/TasksList/TasksList.tsx";

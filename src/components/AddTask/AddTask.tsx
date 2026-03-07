@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "./AddTask.module.css";
-import { addTask } from "../../api/FetchingTasks.ts";
+import { addTask } from "../../api/TodoApi.ts";
 import titleValidation from "../../utils/validator.ts";
 import Button from "../../ui/Button/Button.js";
 
