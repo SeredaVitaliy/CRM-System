@@ -1,4 +1,16 @@
-export async function getTasks(filter) {
+type Filter = "all" | "inWork" | "completed";
+
+type NewTask = {
+  title: string;
+  isDone: boolean;
+};
+
+type EditTask = {
+  title?: string;
+  isDone?: boolean;
+};
+
+export async function getTasks(filter: Filter) {
   try {
     const actualFilter = filter === "all" ? null : filter;
     const query = actualFilter ? "?filter=" + actualFilter : "";
@@ -18,7 +30,7 @@ export async function getTasks(filter) {
   }
 }
 
-export async function addTask(task) {
+export async function addTask(task: NewTask) {
   try {
     const response = await fetch("https://easydev.club/api/v1/todos", {
       method: "POST",
@@ -42,7 +54,7 @@ export async function addTask(task) {
 }
 
 //удаление
-export async function deleteTask(id) {
+export async function deleteTask(id: number) {
   try {
     const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
       method: "DELETE",
@@ -58,7 +70,7 @@ export async function deleteTask(id) {
 }
 
 //редактирование тайтла задачи
-export async function fetchEditTask(editTask, id) {
+export async function fetchEditTask(editTask: EditTask, id: number) {
   try {
     const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
       method: "PUT",

@@ -6,11 +6,29 @@ import TasksList from "../../components/TasksList/TasksList.tsx";
 import AddTask from "../../components/AddTask/AddTask.tsx";
 import TabButtons from "../../components/TabButtons/TabButtons.tsx";
 
-export function TodosPage() {
-  const [selectedTab, setSelectedTab] = useState("all");
-  const [tasks, setTasks] = useState([]);
+type Tab = "all" | "inWork" | "completed";
 
-  const [todoInfo, setTodoInfo] = useState({ all: 0, inWork: 0, completed: 0 });
+type TodoInfo = {
+  all: number;
+  inWork: number;
+  completed: number;
+};
+
+type Task = {
+  id: number;
+  title: string;
+  isDone: boolean;
+};
+
+export function TodosPage() {
+  const [selectedTab, setSelectedTab] = useState<Tab>("all");
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  const [todoInfo, setTodoInfo] = useState<TodoInfo>({
+    all: 0,
+    inWork: 0,
+    completed: 0,
+  });
 
   async function updateTasks() {
     try {
@@ -34,11 +52,11 @@ export function TodosPage() {
     [selectedTab],
   );
 
-  function handleSelectTab(selectedButton) {
+  function handleSelectTab(selectedButton: Tab) {
     setSelectedTab(selectedButton);
   }
 
-  async function fetchTabs(selectedTab) {
+  async function fetchTabs(selectedTab: Tab) {
     try {
       const response = await getTasks(selectedTab);
       setTasks(response.data);

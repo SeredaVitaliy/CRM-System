@@ -1,7 +1,18 @@
 import TaskItem from "../TaskItem/TaskItem";
 import styles from "./TasksList.module.css";
 
-export default function TasksList({ tasks, onUpdate }) {
+type Task = {
+  id: number;
+  title: string;
+  isDone: boolean;
+};
+
+type TasksListProps = {
+  tasks: Task[];
+  onUpdate: () => Promise<void>;
+};
+
+export default function TasksList({ tasks, onUpdate }: TasksListProps) {
   return (
     <ul className={styles.taskList}>
       {tasks.map((task) => (

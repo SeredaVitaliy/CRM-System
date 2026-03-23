@@ -1,16 +1,27 @@
-import { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import styles from "./TaskItem.module.css";
 import CheckBox from "../../ui/CheckBox/CheckBox.tsx";
 import IconButton from "../../ui/IconButton/IconButton.tsx";
 import titleValidation from "../../utils/validator.ts";
 import { deleteTask, fetchEditTask } from "../../api/TodoApi.ts";
 
-export default function TaskItem({ task, onUpdate }) {
-  const [isEdit, setIsEdit] = useState(false); // стейт для редактирования
-  const [editTaskTitle, setEditTaskTitle] = useState(task.title);
-  const [errorValid, setErrorValid] = useState("");
+type Task = {
+  id: number;
+  title: string;
+  isDone: boolean;
+};
 
-  async function handleEditFormSubmit(e) {
+type TaskItemProps = {
+  task: Task;
+  onUpdate: () => Promise<void>;
+};
+
+export default function TaskItem({ task, onUpdate }: TaskItemProps) {
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [editTaskTitle, setEditTaskTitle] = useState<string>(task.title);
+  const [errorValid, setErrorValid] = useState<string>("");
+
+  async function handleEditFormSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const errorMessage = titleValidation(editTaskTitle.trim());
@@ -26,7 +37,7 @@ export default function TaskItem({ task, onUpdate }) {
       setIsEdit(false);
       setErrorValid("");
     } catch (error) {
-      alert(error.message);
+      if (error instanceof Error) alert(error.message);
     }
   }
 
@@ -41,11 +52,11 @@ export default function TaskItem({ task, onUpdate }) {
     setErrorValid("");
   }
 
-  function handleEditTitleChange(e) {
+  function handleEditTitleChange(e: ChangeEvent<HTMLInputElement>) {
     setEditTaskTitle(e.target.value);
   }
 
-  async function handleDeleteTask(id) {
+  async function handleDeleteTask(id: number) {
     try {
       await deleteTask(id);
       await onUpdate();
@@ -54,7 +65,7 @@ export default function TaskItem({ task, onUpdate }) {
     }
   }
 
-  async function handleToggleTask(isDone, id) {
+  async function handleToggleTask(isDone: boolean, id: number) {
     try {
       await fetchEditTask({ isDone: !isDone }, id);
 
