@@ -4,15 +4,10 @@ import CheckBox from "../../ui/CheckBox/CheckBox.tsx";
 import IconButton from "../../ui/IconButton/IconButton.tsx";
 import titleValidation from "../../utils/validator.ts";
 import { deleteTask, fetchEditTask } from "../../api/TodoApi.ts";
-
-type Task = {
-  id: number;
-  title: string;
-  isDone: boolean;
-};
+import { Todo } from "@/types/types.ts";
 
 type TaskItemProps = {
-  task: Task;
+  task: Todo;
   onUpdate: () => Promise<void>;
 };
 
@@ -96,17 +91,17 @@ export default function TaskItem({ task, onUpdate }: TaskItemProps) {
             </div>
 
             <div className={styles.editButtons}>
-              <IconButton
-                type="submit"
-                ariaLabel="save"
-                variant="save"
-              ></IconButton>
+              <IconButton type="submit" ariaLabel="save" variant="primary">
+                <img src="/src/assets/ok.svg" />
+              </IconButton>
               <IconButton
                 type="button"
                 ariaLabel="return"
-                variant="return"
+                variant="danger"
                 onClick={handleReturnClick}
-              ></IconButton>
+              >
+                <img src="/src/assets/return.svg" />
+              </IconButton>
             </div>
           </form>
         )}
@@ -122,15 +117,19 @@ export default function TaskItem({ task, onUpdate }: TaskItemProps) {
             <div className={styles.initialButtons}>
               <IconButton
                 ariaLabel="edit"
-                variant="edit"
+                variant="primary"
                 onClick={handleToggleEdit}
-              ></IconButton>
+              >
+                <img src="/src/assets/Group.svg" />
+              </IconButton>
 
               <IconButton
                 ariaLabel="delete"
-                variant="delete"
+                variant="danger"
                 onClick={() => handleDeleteTask(task.id)}
-              ></IconButton>
+              >
+                <img src="/src/assets/Vector.svg" />
+              </IconButton>
             </div>
           </>
         )}

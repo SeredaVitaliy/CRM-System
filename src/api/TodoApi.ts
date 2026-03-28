@@ -1,16 +1,14 @@
-type Filter = "all" | "inWork" | "completed";
+import {
+  MetaResponse,
+  Todo,
+  TodoFilter,
+  TodoInfo,
+  TodoRequest,
+} from "@/types/types";
 
-type NewTask = {
-  title: string;
-  isDone: boolean;
-};
-
-type EditTask = {
-  title?: string;
-  isDone?: boolean;
-};
-
-export async function getTasks(filter: Filter) {
+export async function getTasks(
+  filter: TodoFilter,
+): Promise<MetaResponse<Todo, TodoInfo>> {
   try {
     const actualFilter = filter === "all" ? null : filter;
     const query = actualFilter ? "?filter=" + actualFilter : "";
@@ -23,6 +21,7 @@ export async function getTasks(filter: Filter) {
 
     const data = await response.json();
 
+    console.log(data);
     return data;
   } catch (error) {
     console.error(error);
@@ -30,7 +29,7 @@ export async function getTasks(filter: Filter) {
   }
 }
 
-export async function addTask(task: NewTask) {
+export async function addTask(task: TodoRequest): Promise<Todo> {
   try {
     const response = await fetch("https://easydev.club/api/v1/todos", {
       method: "POST",
@@ -45,7 +44,6 @@ export async function addTask(task: NewTask) {
     }
     const resData = await response.json();
 
-    console.log(resData);
     return resData;
   } catch (error) {
     console.error(error);
@@ -54,7 +52,7 @@ export async function addTask(task: NewTask) {
 }
 
 //удаление
-export async function deleteTask(id: number) {
+export async function deleteTask(id: number): Promise<Todo> {
   try {
     const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
       method: "DELETE",
@@ -63,6 +61,8 @@ export async function deleteTask(id: number) {
     if (!response.ok) {
       throw new Error("не удалось обновить данные(удаление задачи)");
     }
+    const resData = await response.json();
+    return resData;
   } catch (error) {
     console.error(error);
     throw error;
@@ -70,7 +70,10 @@ export async function deleteTask(id: number) {
 }
 
 //редактирование тайтла задачи
-export async function fetchEditTask(editTask: EditTask, id: number) {
+export async function fetchEditTask(
+  editTask: TodoRequest,
+  id: number,
+): Promise<Todo> {
   try {
     const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
       method: "PUT",

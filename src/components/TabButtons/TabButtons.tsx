@@ -1,18 +1,11 @@
+import { TodoFilter, TodoInfo } from "@/types/types";
 import TabButton from "../../ui/TabButton/TabButton";
 import styles from "./TabButtons.module.css";
 
-type Tab = "all" | "inWork" | "completed";
-
-type TodoInfo = {
-  all: number;
-  inWork: number;
-  completed: number;
-};
-
 type TabButtonsProps = {
-  selectedTab: Tab;
+  selectedTab: TodoFilter;
   todoInfo: TodoInfo;
-  onSelectedTab: (selectedTab: Tab) => void;
+  onSelectedTab: (selectedTab: TodoFilter) => void;
 };
 
 export default function TabButtons({
