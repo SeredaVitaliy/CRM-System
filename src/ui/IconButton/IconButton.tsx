@@ -2,13 +2,13 @@ import { ReactNode } from "react";
 import styles from "./IconButton.module.css";
 import { Variant } from "@/types/types";
 
-type IconButtonProps = {
-  type?: "submit" | "button";
+interface Props {
+  type: "submit" | "button";
   variant: Variant;
   onClick?: () => void;
   ariaLabel: string;
   children: ReactNode;
-};
+}
 
 export default function IconButton({
   onClick,
@@ -16,7 +16,7 @@ export default function IconButton({
   type,
   variant,
   children,
-}: IconButtonProps) {
+}: Props) {
   return (
     <button
       onClick={onClick}

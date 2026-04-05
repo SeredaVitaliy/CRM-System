@@ -11,9 +11,11 @@ export async function getTasks(
 ): Promise<MetaResponse<Todo, TodoInfo>> {
   try {
     const actualFilter = filter === "all" ? null : filter;
-    const query = actualFilter ? "?filter=" + actualFilter : "";
-    const fullUrl = "https://easydev.club/api/v1/todos" + query;
-    const response = await fetch(fullUrl);
+    const url = new URL("https://easydev.club/api/v1/todos");
+    if (actualFilter) {
+      url.searchParams.set("filter", actualFilter);
+    }
+    const response = await fetch(url);
 
     if (!response.ok) {
       throw new Error("не удалось получить данные");
@@ -21,7 +23,6 @@ export async function getTasks(
 
     const data = await response.json();
 
-    console.log(data);
     return data;
   } catch (error) {
     console.error(error);
@@ -52,7 +53,7 @@ export async function addTask(task: TodoRequest): Promise<Todo> {
 }
 
 //удаление
-export async function deleteTask(id: number): Promise<Todo> {
+export async function deleteTask(id: number): Promise<void> {
   try {
     const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
       method: "DELETE",
@@ -61,8 +62,6 @@ export async function deleteTask(id: number): Promise<Todo> {
     if (!response.ok) {
       throw new Error("не удалось обновить данные(удаление задачи)");
     }
-    const resData = await response.json();
-    return resData;
   } catch (error) {
     console.error(error);
     throw error;

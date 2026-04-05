@@ -4,15 +4,15 @@ import { addTask } from "../../api/TodoApi.ts";
 import titleValidation from "../../utils/validator.ts";
 import Button from "../../ui/Button/Button.js";
 
-type AddTaskProps = {
+interface Props {
   onUpdate: () => Promise<void>;
-};
+}
 
-export default function AddTask({ onUpdate }: AddTaskProps) {
+export default function AddTask({ onUpdate }: Props) {
   const [title, setTitle] = useState<string>("");
   const [errorValid, setErrorValid] = useState<string>("");
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleAddTask(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     //валидация
@@ -31,14 +31,13 @@ export default function AddTask({ onUpdate }: AddTaskProps) {
       setTitle("");
     } catch (error) {
       if (error instanceof Error) {
-        alert(error);
         setErrorValid(error.message);
       }
     }
   }
   return (
     <>
-      <form onSubmit={handleSubmit} className={styles.container} noValidate>
+      <form onSubmit={handleAddTask} className={styles.container} noValidate>
         <input
           className={`${styles.form} ${styles.formAdd}`}
           type="text"

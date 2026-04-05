@@ -2,17 +2,17 @@ import { TodoFilter, TodoInfo } from "@/types/types";
 import TabButton from "../../ui/TabButton/TabButton";
 import styles from "./TabButtons.module.css";
 
-type TabButtonsProps = {
+interface Props {
   selectedTab: TodoFilter;
   todoInfo: TodoInfo;
   onSelectedTab: (selectedTab: TodoFilter) => void;
-};
+}
 
 export default function TabButtons({
   selectedTab,
   todoInfo,
   onSelectedTab,
-}: TabButtonsProps) {
+}: Props) {
   return (
     <menu className={styles.tabsButtons}>
       <TabButton

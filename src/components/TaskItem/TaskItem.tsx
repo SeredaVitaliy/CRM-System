@@ -4,17 +4,30 @@ import CheckBox from "../../ui/CheckBox/CheckBox.tsx";
 import IconButton from "../../ui/IconButton/IconButton.tsx";
 import titleValidation from "../../utils/validator.ts";
 import { deleteTask, fetchEditTask } from "../../api/TodoApi.ts";
-import { Todo } from "@/types/types.ts";
+import { Todo, TodoRequest } from "@/types/types.ts";
 
-type TaskItemProps = {
+interface Props {
   task: Todo;
   onUpdate: () => Promise<void>;
-};
+}
 
-export default function TaskItem({ task, onUpdate }: TaskItemProps) {
+export default function TaskItem({ task, onUpdate }: Props) {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [editTaskTitle, setEditTaskTitle] = useState<string>(task.title);
   const [errorValid, setErrorValid] = useState<string>("");
+
+  async function updateTodo(
+    taskChanges: TodoRequest,
+    id: number,
+  ): Promise<void> {
+    try {
+      await fetchEditTask(taskChanges, id);
+      await onUpdate();
+    } catch (error) {
+      if (error instanceof Error) alert(error.message);
+      throw error;
+    }
+  }
 
   async function handleEditFormSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -25,18 +38,14 @@ export default function TaskItem({ task, onUpdate }: TaskItemProps) {
       setErrorValid(errorMessage);
       return;
     }
-    try {
-      await fetchEditTask({ title: editTaskTitle.trim() }, task.id);
 
-      await onUpdate();
-      setIsEdit(false);
-      setErrorValid("");
-    } catch (error) {
-      if (error instanceof Error) alert(error.message);
-    }
+    await updateTodo({ title: editTaskTitle.trim() }, task.id);
+    setIsEdit(false);
+    setErrorValid("");
   }
 
   function handleToggleEdit() {
+    if (isEdit === false) setEditTaskTitle(task.title);
     setIsEdit((editing) => !editing);
     setErrorValid("");
   }
@@ -56,20 +65,13 @@ export default function TaskItem({ task, onUpdate }: TaskItemProps) {
       await deleteTask(id);
       await onUpdate();
     } catch (error) {
-      alert(error);
+      if (error instanceof Error) alert(error.message);
     }
   }
 
   async function handleToggleTask(isDone: boolean, id: number) {
-    try {
-      await fetchEditTask({ isDone: !isDone }, id);
-
-      await onUpdate();
-    } catch (error) {
-      alert(error);
-    }
+    await updateTodo({ isDone: !isDone }, id);
   }
-
   return (
     <li className={styles.tasksItem}>
       <div className={styles.taskMain}>
@@ -119,6 +121,7 @@ export default function TaskItem({ task, onUpdate }: TaskItemProps) {
                 ariaLabel="edit"
                 variant="primary"
                 onClick={handleToggleEdit}
+                type="button"
               >
                 <img src="/src/assets/Group.svg" />
               </IconButton>
@@ -127,6 +130,7 @@ export default function TaskItem({ task, onUpdate }: TaskItemProps) {
                 ariaLabel="delete"
                 variant="danger"
                 onClick={() => handleDeleteTask(task.id)}
+                type="button"
               >
                 <img src="/src/assets/Vector.svg" />
               </IconButton>
