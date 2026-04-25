@@ -7,24 +7,21 @@
   background-repeat: no-repeat;
   width: 60px;
   height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.edit {
-  background-image: url("/src/assets/Group.svg");
+.primary {
   background-color: var(--color-accent);
 }
 
-.delete {
-  background-image: url("/src/assets/Vector.svg");
+.danger {
   background-color: var(--color-red);
 }
 
-.save {
-  background-color: var(--color-accent);
-  background-image: url("/src/assets/ok.svg");
-}
-
-.return {
-  background-color: var(--color-red);
-  background-image: url("/src/assets/del.svg");
+.iconBtn img {
+  width: 18px;
+  height: 18px;
+  display: block;
 }

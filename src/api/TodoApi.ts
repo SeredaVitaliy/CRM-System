@@ -1,9 +1,21 @@
-export async function getTasks(filter) {
+import {
+  MetaResponse,
+  Todo,
+  TodoFilter,
+  TodoInfo,
+  TodoRequest,
+} from "@/types/types";
+
+export async function getTasks(
+  filter: TodoFilter,
+): Promise<MetaResponse<Todo, TodoInfo>> {
   try {
     const actualFilter = filter === "all" ? null : filter;
-    const query = actualFilter ? "?filter=" + actualFilter : "";
-    const fullUrl = "https://easydev.club/api/v1/todos" + query;
-    const response = await fetch(fullUrl);
+    const url = new URL("https://easydev.club/api/v1/todos");
+    if (actualFilter) {
+      url.searchParams.set("filter", actualFilter);
+    }
+    const response = await fetch(url);
 
     if (!response.ok) {
       throw new Error("не удалось получить данные");
@@ -18,7 +30,7 @@ export async function getTasks(filter) {
   }
 }
 
-export async function addTask(task) {
+export async function addTask(task: TodoRequest): Promise<Todo> {
   try {
     const response = await fetch("https://easydev.club/api/v1/todos", {
       method: "POST",
@@ -33,7 +45,6 @@ export async function addTask(task) {
     }
     const resData = await response.json();
 
-    console.log(resData);
     return resData;
   } catch (error) {
     console.error(error);
@@ -42,7 +53,7 @@ export async function addTask(task) {
 }
 
 //удаление
-export async function deleteTask(id) {
+export async function deleteTask(id: number): Promise<void> {
   try {
     const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
       method: "DELETE",
@@ -58,7 +69,10 @@ export async function deleteTask(id) {
 }
 
 //редактирование тайтла задачи
-export async function fetchEditTask(editTask, id) {
+export async function fetchEditTask(
+  editTask: TodoRequest,
+  id: number,
+): Promise<Todo> {
   try {
     const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
       method: "PUT",

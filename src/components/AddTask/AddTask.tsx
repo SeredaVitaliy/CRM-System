@@ -1,14 +1,18 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import styles from "./AddTask.module.css";
-import { addTask } from "../../api/fetchingTasks";
-import titleValidation from "../../utils/validator";
-import Button from "../../ui/Button/Button";
+import { addTask } from "../../api/TodoApi.ts";
+import titleValidation from "../../utils/validator.ts";
+import Button from "../../ui/Button/Button.js";
 
-export default function AddTask({ onUpdate }) {
-  const [title, setTitle] = useState("");
-  const [errorValid, setErrorValid] = useState("");
+interface Props {
+  onUpdate: () => Promise<void>;
+}
 
-  async function handleSubmit(e) {
+export default function AddTask({ onUpdate }: Props) {
+  const [title, setTitle] = useState<string>("");
+  const [errorValid, setErrorValid] = useState<string>("");
+
+  async function handleAddTask(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     //валидация
@@ -26,13 +30,14 @@ export default function AddTask({ onUpdate }) {
 
       setTitle("");
     } catch (error) {
-      alert(error);
-      setErrorValid(error.message);
+      if (error instanceof Error) {
+        setErrorValid(error.message);
+      }
     }
   }
   return (
     <>
-      <form onSubmit={handleSubmit} className={styles.container} noValidate>
+      <form onSubmit={handleAddTask} className={styles.container} noValidate>
         <input
           className={`${styles.form} ${styles.formAdd}`}
           type="text"

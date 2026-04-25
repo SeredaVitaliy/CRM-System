@@ -1,6 +1,13 @@
+import { ReactNode } from "react";
 import styles from "./TabButton.module.css";
 
-export default function TabButton({ children, onSelect, isSelected }) {
+interface Props {
+  isSelected: boolean;
+  onSelect: () => void;
+  children: ReactNode;
+}
+
+export default function TabButton({ children, onSelect, isSelected }: Props) {
   return (
     <li>
       <button
