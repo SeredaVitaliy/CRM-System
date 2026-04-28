@@ -1,15 +1,17 @@
 import styles from "./CheckBox.module.css";
+import { Checkbox } from "antd";
 
 interface Props {
-  checked: boolean;
-  onChange: () => void;
-  type: "checkbox";
+  isChecked: boolean;
+  onChange: (checked: boolean) => void;
 }
 
-export default function CheckBox({ checked, onChange, type }: Props) {
+export default function CheckBox({ onChange, isChecked }: Props) {
   return (
-    <label className={styles.checkbox}>
-      <input type={type} checked={checked} onChange={onChange} />
-    </label>
+    <Checkbox
+      onChange={(e) => onChange(e.target.checked)}
+      checked={isChecked}
+      className={styles.checkbox}
+    />
   );
 }

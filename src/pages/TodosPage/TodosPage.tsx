@@ -5,7 +5,7 @@ import styles from "./TodosPage.module.css";
 import TasksList from "../../components/TasksList/TasksList.tsx";
 import AddTask from "../../components/AddTask/AddTask.tsx";
 import TabButtons from "../../components/TabButtons/TabButtons.tsx";
-import { Todo, TodoFilter, TodoInfo } from "@/types/types.ts";
+import { Todo, TodoFilter, TodoInfo } from "../../types/types.ts";
 
 export function TodosPage() {
   const [selectedTab, setSelectedTab] = useState<TodoFilter>("all");
@@ -35,6 +35,10 @@ export function TodosPage() {
         }
       }
       fetchTasks();
+
+      const interval = setInterval(fetchTasks, 5000);
+
+      return () => clearInterval(interval);
     },
     [selectedTab],
   );
@@ -56,11 +60,7 @@ export function TodosPage() {
   return (
     <div className={styles.container}>
       <AddTask onUpdate={updateTasks} />
-      <TabButtons
-        selectedTab={selectedTab}
-        todoInfo={todoInfo}
-        onSelectedTab={handleSelectTab}
-      />
+      <TabButtons todoInfo={todoInfo} onSelectedTab={handleSelectTab} />
       <TasksList onUpdate={updateTasks} tasks={tasks} />
     </div>
   );

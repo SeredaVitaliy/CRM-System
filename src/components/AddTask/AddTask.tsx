@@ -1,53 +1,71 @@
-import { FormEvent, useState } from "react";
 import styles from "./AddTask.module.css";
 import { addTask } from "../../api/TodoApi.ts";
 import titleValidation from "../../utils/validator.ts";
-import Button from "../../ui/Button/Button.js";
+import ButtonAnt from "../../ui/Button/Button.js";
+import { Form, Input } from "antd";
 
 interface Props {
   onUpdate: () => Promise<void>;
 }
 
+interface AddTaskFormValues {
+  title: string;
+}
+
 export default function AddTask({ onUpdate }: Props) {
-  const [title, setTitle] = useState<string>("");
-  const [errorValid, setErrorValid] = useState<string>("");
+  const [form] = Form.useForm<AddTaskFormValues>();
 
-  async function handleAddTask(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    //валидация
-    const errorMessage = titleValidation(title.trim());
-    if (errorMessage) {
-      setErrorValid(errorMessage);
-      return;
-    }
-    //  добавление задачи
-    const newTask = { title: title.trim(), isDone: false };
-    setErrorValid("");
+  async function handleAddTask(values: AddTaskFormValues) {
+    const normalizedTitle = values.title.trim();
+    const newTask = { title: normalizedTitle, isDone: false };
     try {
       await addTask(newTask);
       await onUpdate();
-
-      setTitle("");
+      form.resetFields();
     } catch (error) {
       if (error instanceof Error) {
-        setErrorValid(error.message);
+        form.setFields([
+          {
+            name: "title",
+            errors: [error.message],
+          },
+        ]);
       }
     }
   }
+
   return (
-    <>
-      <form onSubmit={handleAddTask} className={styles.container} noValidate>
-        <input
+    <Form
+      form={form}
+      className={styles.container}
+      onFinish={handleAddTask}
+      requiredMark={false}
+    >
+      <Form.Item
+        name="title"
+        validateTrigger={["onSubmit"]}
+        rules={[
+          {
+            validator: (_, value: string | undefined) => {
+              const errorMessage = titleValidation(value || "");
+              if (errorMessage) {
+                return Promise.reject(errorMessage);
+              }
+              return Promise.resolve();
+            },
+          },
+        ]}
+      >
+        <Input
           className={`${styles.form} ${styles.formAdd}`}
-          type="text"
           placeholder="Task To Be Done..."
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          autoComplete="off"
+          size="large"
         />
-        <Button variant="primary">Add</Button>
-      </form>
-      {errorValid && <p className={styles.textError}>{errorValid}</p>}
-    </>
+      </Form.Item>
+      <ButtonAnt htmlType="submit" size="large" variant="primary">
+        Add
+      </ButtonAnt>
+    </Form>
   );
 }

@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import {
   MetaResponse,
   Todo,
@@ -11,83 +13,54 @@ export async function getTasks(
 ): Promise<MetaResponse<Todo, TodoInfo>> {
   try {
     const actualFilter = filter === "all" ? null : filter;
-    const url = new URL("https://easydev.club/api/v1/todos");
-    if (actualFilter) {
-      url.searchParams.set("filter", actualFilter);
-    }
-    const response = await fetch(url);
 
-    if (!response.ok) {
-      throw new Error("не удалось получить данные");
-    }
+    const response = await axios.get("https://easydev.club/api/v1/todos", {
+      params: actualFilter ? { filter: actualFilter } : null,
+    });
 
-    const data = await response.json();
-
-    return data;
+    return response.data;
   } catch (error) {
-    console.error(error);
+    console.error("не удалось получить данные");
     throw error;
   }
 }
 
 export async function addTask(task: TodoRequest): Promise<Todo> {
   try {
-    const response = await fetch("https://easydev.club/api/v1/todos", {
-      method: "POST",
-      body: JSON.stringify(task),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await axios.post(
+      "https://easydev.club/api/v1/todos",
+      task,
+    );
 
-    if (!response.ok) {
-      throw new Error("не удалось обновить данные(добавление задачи)");
-    }
-    const resData = await response.json();
-
-    return resData;
+    return response.data;
   } catch (error) {
-    console.error(error);
+    console.error("не удалось обновить данные(добавление задачи)");
     throw error;
   }
 }
 
-//удаление
 export async function deleteTask(id: number): Promise<void> {
   try {
-    const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
-      method: "DELETE",
-    });
-
-    if (!response.ok) {
-      throw new Error("не удалось обновить данные(удаление задачи)");
-    }
+    await axios.delete(`https://easydev.club/api/v1/todos/${id}`);
   } catch (error) {
-    console.error(error);
+    console.error("не удалось обновить данные(удаление задачи)");
     throw error;
   }
 }
 
-//редактирование тайтла задачи
 export async function fetchEditTask(
   editTask: TodoRequest,
   id: number,
 ): Promise<Todo> {
   try {
-    const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(editTask),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (!response.ok) {
-      throw new Error("не удалось обновить данные");
-    }
-    const resData = await response.json();
-    return resData;
+    const response = await axios.put(
+      `https://easydev.club/api/v1/todos/${id}`,
+      editTask,
+    );
+
+    return response.data;
   } catch (error) {
-    console.error(error);
+    console.error("не удалось обновить данные");
     throw error;
   }
 }

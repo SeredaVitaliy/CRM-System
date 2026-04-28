@@ -1,4 +1,4 @@
-import { Todo } from "@/types/types";
+import { Todo } from "../../types/types";
 import TaskItem from "../TaskItem/TaskItem";
 import styles from "./TasksList.module.css";
 

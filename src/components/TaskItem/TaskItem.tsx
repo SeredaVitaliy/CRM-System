@@ -1,20 +1,31 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { useState } from "react";
 import styles from "./TaskItem.module.css";
 import CheckBox from "../../ui/CheckBox/CheckBox.tsx";
 import IconButton from "../../ui/IconButton/IconButton.tsx";
 import titleValidation from "../../utils/validator.ts";
 import { deleteTask, fetchEditTask } from "../../api/TodoApi.ts";
-import { Todo, TodoRequest } from "@/types/types.ts";
+import { Todo, TodoRequest } from "../../types/types.ts";
+import {
+  CheckOutlined,
+  CloseOutlined,
+  DeleteOutlined,
+  EditOutlined,
+} from "@ant-design/icons";
+import { Form, Input } from "antd";
 
 interface Props {
   task: Todo;
   onUpdate: () => Promise<void>;
 }
 
+interface EditTaskFormValues {
+  title: string;
+}
+
 export default function TaskItem({ task, onUpdate }: Props) {
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [editTaskTitle, setEditTaskTitle] = useState<string>(task.title);
-  const [errorValid, setErrorValid] = useState<string>("");
+
+  const [form] = Form.useForm<EditTaskFormValues>();
 
   async function updateTodo(
     taskChanges: TodoRequest,
@@ -29,35 +40,30 @@ export default function TaskItem({ task, onUpdate }: Props) {
     }
   }
 
-  async function handleEditFormSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    const errorMessage = titleValidation(editTaskTitle.trim());
-
-    if (errorMessage) {
-      setErrorValid(errorMessage);
-      return;
+  async function handleEditFormSubmit(value: EditTaskFormValues) {
+    try {
+      await updateTodo(value, task.id);
+      form.resetFields();
+      setIsEdit(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        form.setFields([
+          {
+            name: "title",
+            errors: [error.message],
+          },
+        ]);
+      }
     }
-
-    await updateTodo({ title: editTaskTitle.trim() }, task.id);
-    setIsEdit(false);
-    setErrorValid("");
   }
 
   function handleToggleEdit() {
-    if (isEdit === false) setEditTaskTitle(task.title);
     setIsEdit((editing) => !editing);
-    setErrorValid("");
+    form.setFieldsValue({ title: task.title });
   }
 
   function handleReturnClick() {
-    setEditTaskTitle(task.title);
     setIsEdit(false);
-    setErrorValid("");
-  }
-
-  function handleEditTitleChange(e: ChangeEvent<HTMLInputElement>) {
-    setEditTaskTitle(e.target.value);
   }
 
   async function handleDeleteTask(id: number) {
@@ -70,42 +76,60 @@ export default function TaskItem({ task, onUpdate }: Props) {
   }
 
   async function handleToggleTask(isDone: boolean, id: number) {
-    await updateTodo({ isDone: !isDone }, id);
+    await updateTodo({ isDone }, id);
   }
   return (
     <li className={styles.tasksItem}>
       <div className={styles.taskMain}>
         <CheckBox
-          type="checkbox"
-          checked={task.isDone}
-          onChange={() => handleToggleTask(task.isDone, task.id)}
+          isChecked={task.isDone}
+          onChange={(checked) => handleToggleTask(checked, task.id)}
         />
 
         {isEdit && (
-          <form onSubmit={handleEditFormSubmit} className={styles.editInput}>
+          <Form
+            form={form}
+            onFinish={handleEditFormSubmit}
+            className={styles.editInput}
+          >
             <div className={styles.editTitle}>
-              <input
-                className={styles.formEdit}
-                value={editTaskTitle}
-                onChange={handleEditTitleChange}
-              />
-              {errorValid && <p className={styles.errorText}>{errorValid}</p>}
+              <Form.Item
+                name="title"
+                validateTrigger={["onSubmit"]}
+                rules={[
+                  {
+                    validator: (_, value: string | undefined) => {
+                      const errorMessage = titleValidation(value || "");
+                      if (errorMessage) {
+                        return Promise.reject(errorMessage);
+                      }
+                      return Promise.resolve();
+                    },
+                  },
+                ]}
+              >
+                <Input className={styles.formEdit} />
+              </Form.Item>
             </div>
 
             <div className={styles.editButtons}>
-              <IconButton type="submit" ariaLabel="save" variant="primary">
-                <img src="/src/assets/ok.svg" />
-              </IconButton>
               <IconButton
-                type="button"
+                htmlType="submit"
+                ariaLabel="save"
+                variant="primary"
+                icon={<CheckOutlined />}
+                size="large"
+              ></IconButton>
+              <IconButton
+                htmlType="button"
                 ariaLabel="return"
                 variant="danger"
                 onClick={handleReturnClick}
-              >
-                <img src="/src/assets/return.svg" />
-              </IconButton>
+                icon={<CloseOutlined />}
+                size="large"
+              ></IconButton>
             </div>
-          </form>
+          </Form>
         )}
 
         {!isEdit && (
@@ -121,19 +145,19 @@ export default function TaskItem({ task, onUpdate }: Props) {
                 ariaLabel="edit"
                 variant="primary"
                 onClick={handleToggleEdit}
-                type="button"
-              >
-                <img src="/src/assets/Group.svg" />
-              </IconButton>
+                htmlType="button"
+                icon={<EditOutlined />}
+                size="large"
+              ></IconButton>
 
               <IconButton
                 ariaLabel="delete"
                 variant="danger"
                 onClick={() => handleDeleteTask(task.id)}
-                type="button"
-              >
-                <img src="/src/assets/Vector.svg" />
-              </IconButton>
+                htmlType="button"
+                icon={<DeleteOutlined />}
+                size="large"
+              ></IconButton>
             </div>
           </>
         )}

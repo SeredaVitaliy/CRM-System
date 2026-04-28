@@ -1,16 +1,35 @@
 import { ReactNode } from "react";
 import styles from "./Button.module.css";
+import { Button } from "antd";
+import type { ConfigProviderProps } from "antd";
+
+type htmlType = "submit" | "button" | "reset";
 
 interface Props {
   onClick?: () => void;
   variant: "primary";
   children: ReactNode;
+  htmlType: htmlType;
+  size: SizeType;
 }
 
-export default function Button({ children, onClick, variant }: Props) {
+type SizeType = ConfigProviderProps["componentSize"];
+
+export default function ButtonAnt({
+  children,
+  onClick,
+  variant,
+  htmlType,
+  size,
+}: Props) {
   return (
-    <button onClick={onClick} className={`${styles.btn} ${styles[variant]}`}>
+    <Button
+      htmlType={htmlType}
+      size={size}
+      onClick={onClick}
+      className={`${styles.btn} ${styles[variant]}`}
+    >
       {children}
-    </button>
+    </Button>
   );
 }
