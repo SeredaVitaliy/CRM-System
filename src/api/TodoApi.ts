@@ -1,5 +1,3 @@
-import axios from "axios";
-
 import {
   MetaResponse,
   Todo,
@@ -7,6 +5,7 @@ import {
   TodoInfo,
   TodoRequest,
 } from "@/types/types";
+import api from "./axiosInstance";
 
 export async function getTasks(
   filter: TodoFilter,
@@ -14,7 +13,7 @@ export async function getTasks(
   try {
     const actualFilter = filter === "all" ? null : filter;
 
-    const response = await axios.get("https://easydev.club/api/v1/todos", {
+    const response = await api.get("", {
       params: actualFilter ? { filter: actualFilter } : null,
     });
 
@@ -27,10 +26,7 @@ export async function getTasks(
 
 export async function addTask(task: TodoRequest): Promise<Todo> {
   try {
-    const response = await axios.post(
-      "https://easydev.club/api/v1/todos",
-      task,
-    );
+    const response = await api.post("/", task);
 
     return response.data;
   } catch (error) {
@@ -41,7 +37,7 @@ export async function addTask(task: TodoRequest): Promise<Todo> {
 
 export async function deleteTask(id: number): Promise<void> {
   try {
-    await axios.delete(`https://easydev.club/api/v1/todos/${id}`);
+    await api.delete(`/${id}`);
   } catch (error) {
     console.error("не удалось обновить данные(удаление задачи)");
     throw error;
@@ -53,10 +49,7 @@ export async function fetchEditTask(
   id: number,
 ): Promise<Todo> {
   try {
-    const response = await axios.put(
-      `https://easydev.club/api/v1/todos/${id}`,
-      editTask,
-    );
+    const response = await api.put(`/${id}`, editTask);
 
     return response.data;
   } catch (error) {

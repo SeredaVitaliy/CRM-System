@@ -1,7 +1,5 @@
 import { useState } from "react";
 import styles from "./TaskItem.module.css";
-import CheckBox from "../../ui/CheckBox/CheckBox.tsx";
-import IconButton from "../../ui/IconButton/IconButton.tsx";
 import titleValidation from "../../utils/validator.ts";
 import { deleteTask, fetchEditTask } from "../../api/TodoApi.ts";
 import { Todo, TodoRequest } from "../../types/types.ts";
@@ -11,7 +9,7 @@ import {
   DeleteOutlined,
   EditOutlined,
 } from "@ant-design/icons";
-import { Form, Input } from "antd";
+import { Form, Input, Button, Checkbox } from "antd";
 
 interface Props {
   task: Todo;
@@ -81,9 +79,9 @@ export default function TaskItem({ task, onUpdate }: Props) {
   return (
     <li className={styles.tasksItem}>
       <div className={styles.taskMain}>
-        <CheckBox
-          isChecked={task.isDone}
-          onChange={(checked) => handleToggleTask(checked, task.id)}
+        <Checkbox
+          checked={task.isDone}
+          onChange={(e) => handleToggleTask(e.target.checked, task.id)}
         />
 
         {isEdit && (
@@ -113,21 +111,17 @@ export default function TaskItem({ task, onUpdate }: Props) {
             </div>
 
             <div className={styles.editButtons}>
-              <IconButton
+              <Button
                 htmlType="submit"
-                ariaLabel="save"
-                variant="primary"
                 icon={<CheckOutlined />}
                 size="large"
-              ></IconButton>
-              <IconButton
+              ></Button>
+              <Button
                 htmlType="button"
-                ariaLabel="return"
-                variant="danger"
                 onClick={handleReturnClick}
                 icon={<CloseOutlined />}
                 size="large"
-              ></IconButton>
+              ></Button>
             </div>
           </Form>
         )}
@@ -141,23 +135,19 @@ export default function TaskItem({ task, onUpdate }: Props) {
             </span>
 
             <div className={styles.initialButtons}>
-              <IconButton
-                ariaLabel="edit"
-                variant="primary"
+              <Button
                 onClick={handleToggleEdit}
                 htmlType="button"
                 icon={<EditOutlined />}
                 size="large"
-              ></IconButton>
+              ></Button>
 
-              <IconButton
-                ariaLabel="delete"
-                variant="danger"
+              <Button
                 onClick={() => handleDeleteTask(task.id)}
                 htmlType="button"
                 icon={<DeleteOutlined />}
                 size="large"
-              ></IconButton>
+              ></Button>
             </div>
           </>
         )}

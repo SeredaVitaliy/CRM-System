@@ -1,8 +1,7 @@
 import styles from "./AddTask.module.css";
 import { addTask } from "../../api/TodoApi.ts";
 import titleValidation from "../../utils/validator.ts";
-import ButtonAnt from "../../ui/Button/Button.js";
-import { Form, Input } from "antd";
+import { Form, Input, Button } from "antd";
 
 interface Props {
   onUpdate: () => Promise<void>;
@@ -63,9 +62,9 @@ export default function AddTask({ onUpdate }: Props) {
           size="large"
         />
       </Form.Item>
-      <ButtonAnt htmlType="submit" size="large" variant="primary">
+      <Button htmlType="submit" size="large">
         Add
-      </ButtonAnt>
+      </Button>
     </Form>
   );
 }
