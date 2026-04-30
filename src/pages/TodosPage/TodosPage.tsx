@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getTasks } from "../../api/TodoApi.ts";
 
 import styles from "./TodosPage.module.css";
@@ -17,13 +17,13 @@ export function TodosPage() {
     completed: 0,
   });
 
-  async function updateTasks() {
+  const updateTasks = useCallback(async () => {
     try {
       await fetchTabs(selectedTab);
     } catch (error) {
       alert(error);
     }
-  }
+  }, [selectedTab]);
 
   useEffect(
     function () {

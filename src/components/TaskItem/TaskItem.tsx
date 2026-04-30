@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import styles from "./TaskItem.module.css";
 import titleValidation from "../../utils/validator.ts";
 import { deleteTask, fetchEditTask } from "../../api/TodoApi.ts";
@@ -20,7 +20,7 @@ interface EditTaskFormValues {
   title: string;
 }
 
-export default function TaskItem({ task, onUpdate }: Props) {
+function TaskItem({ task, onUpdate }: Props) {
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
   const [form] = Form.useForm<EditTaskFormValues>();
@@ -155,3 +155,5 @@ export default function TaskItem({ task, onUpdate }: Props) {
     </li>
   );
 }
+
+export default memo(TaskItem);
