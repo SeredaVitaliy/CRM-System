@@ -26,7 +26,7 @@ export async function getTasks(
 
 export async function addTask(task: TodoRequest): Promise<Todo> {
   try {
-    const response = await api.post("/", task);
+    const response = await api.post("", task);
 
     return response.data;
   } catch (error) {
