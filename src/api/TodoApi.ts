@@ -7,53 +7,47 @@ import {
 } from "@/types/types";
 import api from "./axiosInstance";
 
-export async function getTasks(
+export async function getTodos(
   filter: TodoFilter,
 ): Promise<MetaResponse<Todo, TodoInfo>> {
   try {
-    const actualFilter = filter === "all" ? null : filter;
-
     const response = await api.get("", {
-      params: actualFilter ? { filter: actualFilter } : null,
+      params: { filter },
     });
 
     return response.data;
   } catch (error) {
-    console.error("не удалось получить данные");
     throw error;
   }
 }
 
-export async function addTask(task: TodoRequest): Promise<Todo> {
+export async function addTodo(todo: TodoRequest): Promise<Todo> {
   try {
-    const response = await api.post("", task);
+    const response = await api.post("", todo);
 
     return response.data;
   } catch (error) {
-    console.error("не удалось обновить данные(добавление задачи)");
     throw error;
   }
 }
 
-export async function deleteTask(id: number): Promise<void> {
+export async function deleteTodo(id: number): Promise<void> {
   try {
     await api.delete(`/${id}`);
   } catch (error) {
-    console.error("не удалось обновить данные(удаление задачи)");
     throw error;
   }
 }
 
-export async function fetchEditTask(
-  editTask: TodoRequest,
+export async function editTodo(
+  editTodo: TodoRequest,
   id: number,
 ): Promise<Todo> {
   try {
-    const response = await api.put(`/${id}`, editTask);
+    const response = await api.put(`/${id}`, editTodo);
 
     return response.data;
   } catch (error) {
-    console.error("не удалось обновить данные");
     throw error;
   }
 }

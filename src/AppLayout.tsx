@@ -1,15 +1,18 @@
 import { Outlet } from "react-router";
 import NavList from "./components/NavList/NavList";
-import styles from "./AppLayout.module.css";
+import { Layout } from "antd";
+
+const { Sider, Content } = Layout;
 
 export default function AppLayout() {
   return (
-    <div className={styles.sidebar}>
-      <NavList />
-
-      <main className={styles.content}>
+    <Layout style={{ minHeight: "100vh" }}>
+      <Sider>
+        <NavList />
+      </Sider>
+      <Content>
         <Outlet />
-      </main>
-    </div>
+      </Content>
+    </Layout>
   );
 }

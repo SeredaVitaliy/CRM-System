@@ -1,4 +1,4 @@
-.tasksItem {
+.todoItem {
   border: none;
   border-radius: 10px;
   margin-bottom: 10px;
@@ -11,7 +11,7 @@
   align-items: center;
 }
 
-.taskMain {
+.todoMain {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -19,13 +19,13 @@
   min-width: 0;
 }
 
-.taskTitle {
+.todoTitle {
   flex: 1;
   min-width: 0;
   overflow-wrap: anywhere;
 }
 
-.taskIsDone {
+.todoIsDone {
   flex: 1;
   min-width: 0;
   overflow-wrap: anywhere;

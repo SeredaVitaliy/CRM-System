@@ -1,7 +1,6 @@
 import { memo, useState } from "react";
-import styles from "./TaskItem.module.css";
-import titleValidation from "../../utils/validator.ts";
-import { deleteTask, fetchEditTask } from "../../api/TodoApi.ts";
+import styles from "./TodoItem.module.css";
+import { deleteTodo, editTodo } from "../../api/TodoApi.ts";
 import { Todo, TodoRequest } from "../../types/types.ts";
 import {
   CheckOutlined,
@@ -9,79 +8,74 @@ import {
   DeleteOutlined,
   EditOutlined,
 } from "@ant-design/icons";
-import { Form, Input, Button, Checkbox } from "antd";
+import { Form, Input, Button, Checkbox, notification } from "antd";
 
 interface Props {
-  task: Todo;
+  todo: Todo;
   onUpdate: () => Promise<void>;
 }
 
-interface EditTaskFormValues {
+interface EditTodoFormValues {
   title: string;
 }
 
-function TaskItem({ task, onUpdate }: Props) {
+function TodoItem({ todo, onUpdate }: Props) {
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
-  const [form] = Form.useForm<EditTaskFormValues>();
+  const [form] = Form.useForm<EditTodoFormValues>();
 
   async function updateTodo(
-    taskChanges: TodoRequest,
+    todoChanges: TodoRequest,
     id: number,
   ): Promise<void> {
     try {
-      await fetchEditTask(taskChanges, id);
+      await editTodo(todoChanges, id);
       await onUpdate();
     } catch (error) {
-      if (error instanceof Error) alert(error.message);
+      notification.error({ message: "не удалось обновить задачу" });
       throw error;
     }
   }
 
-  async function handleEditFormSubmit(value: EditTaskFormValues) {
+  async function handleEditFormSubmit(value: EditTodoFormValues) {
     try {
-      await updateTodo(value, task.id);
+      await updateTodo(value, todo.id);
       form.resetFields();
       setIsEdit(false);
     } catch (error) {
-      if (error instanceof Error) {
-        form.setFields([
-          {
-            name: "title",
-            errors: [error.message],
-          },
-        ]);
-      }
+      notification.error({ message: "не удалось обновить задачу" });
     }
   }
 
   function handleToggleEdit() {
     setIsEdit((editing) => !editing);
-    form.setFieldsValue({ title: task.title });
+    form.setFieldsValue({ title: todo.title });
   }
 
   function handleReturnClick() {
     setIsEdit(false);
   }
 
-  async function handleDeleteTask(id: number) {
+  async function handleDeleteTodo(id: number) {
     try {
-      await deleteTask(id);
+      await deleteTodo(id);
       await onUpdate();
     } catch (error) {
-      if (error instanceof Error) alert(error.message);
+      notification.error({
+        message: "не удалось обновить данные(удаление задачи)",
+      });
     }
   }
 
-  async function handleToggleTask(isDone: boolean, id: number) {
-    await updateTodo({ isDone }, id);
+  async function handleToggleTodo(isDone: boolean) {
+    await updateTodo({ isDone }, todo.id);
   }
   return (
-    <li className={styles.tasksItem}>
-      <div className={styles.taskMain}>
+    <li className={styles.todoItem}>
+      <div className={styles.todoMain}>
         <Checkbox
-          checked={task.isDone}
-          onChange={(e) => handleToggleTask(e.target.checked, task.id)}
+          checked={todo.isDone}
+          onChange={(e) => handleToggleTodo(e.target.checked)}
         />
 
         {isEdit && (
@@ -95,15 +89,9 @@ function TaskItem({ task, onUpdate }: Props) {
                 name="title"
                 validateTrigger={["onSubmit"]}
                 rules={[
-                  {
-                    validator: (_, value: string | undefined) => {
-                      const errorMessage = titleValidation(value || "");
-                      if (errorMessage) {
-                        return Promise.reject(errorMessage);
-                      }
-                      return Promise.resolve();
-                    },
-                  },
+                  { required: true, message: "Это поле не может быть пустым" },
+                  { min: 2, message: "Минимальная длина текста 2 символа" },
+                  { max: 64, message: "Максимальная длина текста 64 символа" },
                 ]}
               >
                 <Input className={styles.formEdit} />
@@ -115,12 +103,15 @@ function TaskItem({ task, onUpdate }: Props) {
                 htmlType="submit"
                 icon={<CheckOutlined />}
                 size="large"
+                type="primary"
               ></Button>
               <Button
                 htmlType="button"
                 onClick={handleReturnClick}
                 icon={<CloseOutlined />}
                 size="large"
+                type="primary"
+                danger
               ></Button>
             </div>
           </Form>
@@ -129,9 +120,9 @@ function TaskItem({ task, onUpdate }: Props) {
         {!isEdit && (
           <>
             <span
-              className={task.isDone ? styles.taskIsDone : styles.taskTitle}
+              className={todo.isDone ? styles.todoIsDone : styles.todoTitle}
             >
-              {task.title}
+              {todo.title}
             </span>
 
             <div className={styles.initialButtons}>
@@ -140,13 +131,16 @@ function TaskItem({ task, onUpdate }: Props) {
                 htmlType="button"
                 icon={<EditOutlined />}
                 size="large"
+                type="primary"
               ></Button>
 
               <Button
-                onClick={() => handleDeleteTask(task.id)}
+                onClick={() => handleDeleteTodo(todo.id)}
                 htmlType="button"
                 icon={<DeleteOutlined />}
                 size="large"
+                type="primary"
+                danger
               ></Button>
             </div>
           </>
@@ -156,4 +150,4 @@ function TaskItem({ task, onUpdate }: Props) {
   );
 }
 
-export default memo(TaskItem);
+export default memo(TodoItem);

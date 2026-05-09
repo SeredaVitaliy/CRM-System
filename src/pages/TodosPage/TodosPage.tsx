@@ -1,15 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
-import { getTasks } from "../../api/TodoApi.ts";
+import { getTodos } from "../../api/TodoApi.ts";
 
 import styles from "./TodosPage.module.css";
-import TasksList from "../../components/TasksList/TasksList.tsx";
-import AddTask from "../../components/AddTask/AddTask.tsx";
 import TabButtons from "../../components/TabButtons/TabButtons.tsx";
 import { Todo, TodoFilter, TodoInfo } from "../../types/types.ts";
+import AddTodo from "../../components/AddTodo/AddTodo.tsx";
+import TodoList from "../../components/TodoList/TodoList.tsx";
+import { notification } from "antd";
 
 export function TodosPage() {
   const [selectedTab, setSelectedTab] = useState<TodoFilter>("all");
-  const [tasks, setTasks] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   const [todoInfo, setTodoInfo] = useState<TodoInfo>({
     all: 0,
@@ -17,26 +18,30 @@ export function TodosPage() {
     completed: 0,
   });
 
-  const updateTasks = useCallback(async () => {
+  const updateTodos = useCallback(async () => {
     try {
       await fetchTabs(selectedTab);
     } catch (error) {
-      alert(error);
+      notification.error({
+        message: "не удалось обновить данные",
+      });
     }
   }, [selectedTab]);
 
   useEffect(
     function () {
-      async function fetchTasks() {
+      async function fetchTodos() {
         try {
           await fetchTabs(selectedTab);
         } catch (error) {
-          alert(error);
+          notification.error({
+            message: "не удалось обновить данные",
+          });
         }
       }
-      fetchTasks();
+      fetchTodos();
 
-      const interval = setInterval(fetchTasks, 5000);
+      const interval = setInterval(fetchTodos, 5000);
 
       return () => clearInterval(interval);
     },
@@ -49,19 +54,19 @@ export function TodosPage() {
 
   async function fetchTabs(selectedTab: TodoFilter) {
     try {
-      const response = await getTasks(selectedTab);
-      setTasks(response.data);
+      const response = await getTodos(selectedTab);
+      setTodos(response.data);
       setTodoInfo(response.info!);
     } catch (error) {
-      alert(error);
+      throw error;
     }
   }
 
   return (
     <div className={styles.container}>
-      <AddTask onUpdate={updateTasks} />
+      <AddTodo onUpdate={updateTodos} />
       <TabButtons todoInfo={todoInfo} onSelectedTab={handleSelectTab} />
-      <TasksList onUpdate={updateTasks} tasks={tasks} />
+      <TodoList onUpdate={updateTodos} todos={todos} />
     </div>
   );
 }
