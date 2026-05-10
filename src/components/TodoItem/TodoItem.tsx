@@ -39,7 +39,7 @@ function TodoItem({ todo, onUpdate }: Props) {
 
   async function handleEditFormSubmit(value: EditTodoFormValues) {
     try {
-      await updateTodo(value, todo.id);
+      await updateTodo({ title: value.title.trim() }, todo.id);
       form.resetFields();
       setIsEdit(false);
     } catch (error) {
@@ -90,6 +90,10 @@ function TodoItem({ todo, onUpdate }: Props) {
                 validateTrigger={["onSubmit"]}
                 rules={[
                   { required: true, message: "Это поле не может быть пустым" },
+                  {
+                    whitespace: true,
+                    message: "Это поле не может быть пустым",
+                  },
                   { min: 2, message: "Минимальная длина текста 2 символа" },
                   { max: 64, message: "Максимальная длина текста 64 символа" },
                 ]}

@@ -14,8 +14,7 @@ export default function AddTodo({ onUpdate }: Props) {
   const [form] = Form.useForm<AddTodoFormValues>();
 
   async function handleAddTodo(values: AddTodoFormValues) {
-    const normalizedTitle = values.title.trim();
-    const newTodo = { title: normalizedTitle, isDone: false };
+    const newTodo = { title: values.title.trim(), isDone: false };
     try {
       await addTodo(newTodo);
       await onUpdate();
@@ -37,6 +36,7 @@ export default function AddTodo({ onUpdate }: Props) {
         validateTrigger={["onSubmit"]}
         rules={[
           { required: true, message: "Это поле не может быть пустым" },
+          { whitespace: true, message: "Это поле не может быть пустым" },
           { min: 2, message: "Минимальная длина текста 2 символа" },
           { max: 64, message: "Максимальная длина текста 64 символа" },
         ]}
