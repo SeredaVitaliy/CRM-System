@@ -14,7 +14,7 @@ export default function AddTodo({ onUpdate }: Props) {
   const [form] = Form.useForm<AddTodoFormValues>();
 
   async function handleAddTodo(values: AddTodoFormValues) {
-    const newTodo = { title: values.title.trim(), isDone: false };
+    const newTodo = { title: values.title, isDone: false };
     try {
       await addTodo(newTodo);
       await onUpdate();

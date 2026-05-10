@@ -39,7 +39,7 @@ function TodoItem({ todo, onUpdate }: Props) {
 
   async function handleEditFormSubmit(value: EditTodoFormValues) {
     try {
-      await updateTodo({ title: value.title.trim() }, todo.id);
+      await updateTodo(value, todo.id);
       form.resetFields();
       setIsEdit(false);
     } catch (error) {
