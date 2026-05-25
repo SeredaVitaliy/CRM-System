@@ -48,3 +48,11 @@ export async function getUserProfile(): Promise<Profile> {
     throw error;
   }
 }
+
+export async function logoutUser() {
+  try {
+    await api.post("/user/logout");
+  } catch (error) {
+    throw error;
+  }
+}

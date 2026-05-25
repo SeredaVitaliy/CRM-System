@@ -24,13 +24,13 @@ export default function LoginForm() {
         login: values.login!,
         password: values.password!,
       });
-      localStorage.setItem("refreshToken", token.refreshToken);
       localStorage.setItem("accessToken", token.accessToken);
       dispatch(
         setUser({
           user: null,
           token,
           isAuthenticated: true,
+          refreshToken: token.refreshToken,
         }),
       );
       navigate("/");
@@ -52,8 +52,8 @@ export default function LoginForm() {
           label="login"
           name="login"
           rules={[{ required: true, message: "Please input your username!" }]}
-          validateStatus={errorMessage ? "error" : ""}
-          help={errorMessage}
+          validateStatus={errorMessage ? "error" : undefined}
+          help={errorMessage || undefined}
         >
           <Input />
         </Form.Item>

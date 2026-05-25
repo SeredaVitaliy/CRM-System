@@ -1,3 +1,5 @@
+import { clearUser, setToken } from "@/slices/authSlice";
+import { store } from "@/store/store";
 import axios from "axios";
 
 const api = axios.create({
@@ -28,7 +30,7 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshTokenValue = localStorage.getItem("refreshToken");
+        const refreshTokenValue = store.getState().auth.refreshToken;
 
         if (!refreshTokenValue) {
           return Promise.reject(error);
@@ -44,13 +46,14 @@ api.interceptors.response.use(
         const { accessToken } = response.data;
         const { refreshToken } = response.data;
         localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("refreshToken", refreshToken);
+        store.dispatch(setToken(refreshToken));
 
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return api(originalRequest);
       } catch (refreshError) {
+        store.dispatch(clearUser());
+
         localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
         window.location.href = "/login";
         return Promise.reject(refreshError);
       }

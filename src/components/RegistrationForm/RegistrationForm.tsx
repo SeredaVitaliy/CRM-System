@@ -84,8 +84,8 @@ export default function RegistrationForm() {
               { min: 2, message: "Минимальное количество символов: 2" },
               { max: 60, message: "Максимальное количество символов: 60" },
             ]}
-            validateStatus={errorMessage ? "error" : ""}
-            help={errorMessage}
+            validateStatus={errorMessage ? "error" : undefined}
+            help={errorMessage || undefined}
           >
             <Input />
           </Form.Item>
