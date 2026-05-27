@@ -6,7 +6,7 @@ export default function PrivateRoute() {
   const isAuthenticated = useSelector(
     (state: RootState) =>
       state.auth.isAuthenticated ||
-      Boolean(localStorage.getItem("accessToken")),
+      Boolean(localStorage.getItem("refreshToken")),
   );
   return <>{isAuthenticated ? <Outlet /> : <Navigate to="/login" />}</>;
 }

@@ -162,6 +162,10 @@ export default function RegistrationForm() {
               Sign Up
             </Button>
           </Form.Item>
+          <Form.Item className={styles.antFormItem}>
+            <span>Уже есть аккаунт? </span>
+            <Link to="/login"> Войти</Link>
+          </Form.Item>
         </Form>
       </div>
     );

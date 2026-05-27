@@ -16,7 +16,6 @@ export default function ProfilePage() {
       await logoutUser();
       setUser(null);
       dispatch(clearUser());
-      localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
       navigate("/login");
     } catch (error) {}

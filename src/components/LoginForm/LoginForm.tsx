@@ -24,13 +24,14 @@ export default function LoginForm() {
         login: values.login!,
         password: values.password!,
       });
-      localStorage.setItem("accessToken", token.accessToken);
+      localStorage.setItem("refreshToken", token.refreshToken);
       dispatch(
         setUser({
           user: null,
           token,
           isAuthenticated: true,
           refreshToken: token.refreshToken,
+          isInitialized: true,
         }),
       );
       navigate("/");

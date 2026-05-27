@@ -8,6 +8,10 @@ import AuthPage from "./pages/AuthPage/AuthPage.tsx";
 import LoginForm from "./components/LoginForm/LoginForm.tsx";
 import RegistrationForm from "./components/RegistrationForm/RegistrationForm.tsx";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute.tsx";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { initialAuth } from "./slices/authSlice.ts";
+import { AppDispatch, RootState } from "./store/store.ts";
 
 const router = createBrowserRouter([
   {
@@ -38,5 +42,16 @@ const router = createBrowserRouter([
 ]);
 
 export function App() {
+  const dispatch = useDispatch<AppDispatch>();
+  const isInitialized = useSelector(
+    (state: RootState) => state.auth.isInitialized,
+  );
+
+  useEffect(() => {
+    dispatch(initialAuth());
+  }, [dispatch]);
+
+  if (!isInitialized) return null;
+
   return <RouterProvider router={router} />;
 }
