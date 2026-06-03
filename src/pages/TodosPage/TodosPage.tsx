@@ -3,7 +3,7 @@ import { getTodos } from "../../api/TodoApi.ts";
 
 import styles from "./TodosPage.module.css";
 import TabButtons from "../../components/TabButtons/TabButtons.tsx";
-import { Todo, TodoFilter, TodoInfo } from "../../types/types.ts";
+import { Todo, TodoFilter, TodoInfo } from "@/types/todo";
 import AddTodo from "../../components/AddTodo/AddTodo.tsx";
 import TodoList from "../../components/TodoList/TodoList.tsx";
 import { notification } from "antd";

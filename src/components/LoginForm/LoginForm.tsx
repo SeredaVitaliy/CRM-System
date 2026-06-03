@@ -6,6 +6,8 @@ import { authUser } from "@/api/AuthApi";
 import { setUser } from "@/slices/authSlice";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
+import axios from "axios";
+import { setAccessToken } from "@/api/tokenStorage";
 
 type FieldType = {
   login?: string;
@@ -14,7 +16,7 @@ type FieldType = {
 };
 
 export default function LoginForm() {
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -24,19 +26,16 @@ export default function LoginForm() {
         login: values.login!,
         password: values.password!,
       });
+      setAccessToken(token.accessToken);
       localStorage.setItem("refreshToken", token.refreshToken);
-      dispatch(
-        setUser({
-          user: null,
-          token,
-          isAuthenticated: true,
-          refreshToken: token.refreshToken,
-          isInitialized: true,
-        }),
-      );
+      dispatch(setUser(null));
       navigate("/");
     } catch (error) {
-      setErrorMessage("неверный логин или пароль");
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        setErrorMessage("неверный логин или пароль");
+      } else {
+        setErrorMessage("Ошибка! попробуйте повторить позже");
+      }
     }
   };
 
@@ -50,9 +49,11 @@ export default function LoginForm() {
         layout="vertical"
       >
         <Form.Item<FieldType>
-          label="login"
+          label="Логин"
           name="login"
-          rules={[{ required: true, message: "Please input your username!" }]}
+          rules={[
+            { required: true, message: "Пожалуйста, введите свой никнейм!" },
+          ]}
           validateStatus={errorMessage ? "error" : undefined}
           help={errorMessage || undefined}
         >
@@ -60,9 +61,11 @@ export default function LoginForm() {
         </Form.Item>
 
         <Form.Item<FieldType>
-          label="Password"
+          label="Пароль"
           name="password"
-          rules={[{ required: true, message: "Please input your password!" }]}
+          rules={[
+            { required: true, message: "Пожалуйста, введите свой пароль!" },
+          ]}
         >
           <Input.Password />
         </Form.Item>
@@ -72,17 +75,17 @@ export default function LoginForm() {
           valuePropName="checked"
           label={null}
         >
-          <Checkbox>Remember me</Checkbox>
+          <Checkbox>Запомнить меня</Checkbox>
         </Form.Item>
 
         <Form.Item label={null} className={styles.antFormItem}>
           <Button type="primary" htmlType="submit">
-            Sign in
+            Войти
           </Button>
         </Form.Item>
         <Form.Item className={styles.antFormItem}>
-          <span>Not Registered Yet? </span>
-          <Link to="/registration"> Create an account</Link>
+          <span>Вы не зарегистрированы? </span>
+          <Link to="/registration"> Создайте свой аккаунт</Link>
         </Form.Item>
       </Form>
     </div>

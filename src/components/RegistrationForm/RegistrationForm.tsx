@@ -4,6 +4,7 @@ import styles from "./RegistrationForm.module.css";
 import { useState } from "react";
 import { Link } from "react-router";
 import { registerUser } from "@/api/AuthApi";
+import axios from "axios";
 
 type FieldType = {
   login?: string;
@@ -15,8 +16,8 @@ type FieldType = {
 };
 
 export default function RegistrationForm() {
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     try {
@@ -30,7 +31,11 @@ export default function RegistrationForm() {
 
       setIsSuccess(true);
     } catch (error) {
-      setErrorMessage("данный логин уже занят");
+      if (axios.isAxiosError(error) && error.response?.status === 409) {
+        setErrorMessage("данный логин уже занят");
+      } else {
+        setErrorMessage("Ошибка! попробуйте повторить позже");
+      }
     }
   };
 
@@ -55,11 +60,11 @@ export default function RegistrationForm() {
         >
           <Form.Item
             name="username"
-            label="Username"
+            label="Никнейм"
             rules={[
               {
                 required: true,
-                message: "Please input your username!",
+                message: "Пожалуйста, введите свой никнейм",
                 whitespace: true,
               },
               {
@@ -73,10 +78,10 @@ export default function RegistrationForm() {
             <Input />
           </Form.Item>
           <Form.Item<FieldType>
-            label="login"
+            label="Логин"
             name="login"
             rules={[
-              { required: true, message: "Please input your username!" },
+              { required: true, message: "Пожалуйста, введите свой логин!" },
               {
                 pattern: /^[a-zA-Z]+$/,
                 message: "Вводить можно только символы латиницы",
@@ -92,11 +97,11 @@ export default function RegistrationForm() {
 
           <Form.Item
             name="password"
-            label="Password"
+            label="Пароль"
             rules={[
               {
                 required: true,
-                message: "Please input your password!",
+                message: "Пожалуйста, введите свой пароль!",
               },
               { min: 6, message: "Минимальное количество символов: 6" },
               { max: 60, message: "Максимальное количество символов: 60" },
@@ -108,13 +113,13 @@ export default function RegistrationForm() {
 
           <Form.Item
             name="confirm"
-            label="Confirm Password"
+            label="Повторите пароль"
             dependencies={["password"]}
             hasFeedback
             rules={[
               {
                 required: true,
-                message: "Please confirm your password!",
+                message: "Пожалуйста, повторите свой пароль!",
               },
               ({ getFieldValue }) => ({
                 validator(_, value) {
@@ -134,11 +139,11 @@ export default function RegistrationForm() {
             rules={[
               {
                 type: "email",
-                message: "The input is not valid E-mail!",
+                message: "Введите верный E-mail!",
               },
               {
                 required: true,
-                message: "Please input your E-mail!",
+                message: "Пожалуйста, введите свой E-mail!",
               },
             ]}
           >
@@ -146,7 +151,7 @@ export default function RegistrationForm() {
           </Form.Item>
           <Form.Item
             name="phoneNumber"
-            label="Phone Number"
+            label="Номер телефона"
             rules={[
               {
                 pattern: /^(\+|7|8)\d{9,15}$/,
@@ -159,7 +164,7 @@ export default function RegistrationForm() {
 
           <Form.Item label={null} className={styles.antFormItem}>
             <Button type="primary" htmlType="submit">
-              Sign Up
+              Зарегистрироваться
             </Button>
           </Form.Item>
           <Form.Item className={styles.antFormItem}>

@@ -4,7 +4,7 @@ import {
   TodoFilter,
   TodoInfo,
   TodoRequest,
-} from "@/types/types";
+} from "@/types/todo";
 import api from "./axiosInstance";
 
 export async function getTodos(

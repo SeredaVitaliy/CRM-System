@@ -6,7 +6,7 @@ export default function AuthPage() {
   return (
     <div className={styles.loginPage}>
       <div className={styles.leftSide}>
-        <img src={img} />
+        <img src={img} alt="" />
       </div>
       <div className={styles.rightSide}>
         <Outlet />

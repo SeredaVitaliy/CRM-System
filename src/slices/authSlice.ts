@@ -1,68 +1,58 @@
-import { Profile, Token } from "@/types/types";
+import { setAccessToken } from "@/api/tokenStorage";
+import { Profile } from "@/types/profile";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 interface AuthState {
   user: Profile | null;
-  token: Token | null;
   isAuthenticated: boolean;
-  refreshToken: string | null;
   isInitialized: boolean;
 }
 
 const initialState: AuthState = {
   user: null,
-  token: null,
   isAuthenticated: false,
-  refreshToken: null,
   isInitialized: false,
 };
 
-export const initialAuth = createAsyncThunk(
-  "auth/initial",
-  async (_, { dispatch }) => {
-    const refreshToken = localStorage.getItem("refreshToken");
+export const initialAuth = createAsyncThunk("auth/initial", async () => {
+  const refreshToken = localStorage.getItem("refreshToken");
 
-    if (!refreshToken) return;
+  if (!refreshToken) return false;
 
-    try {
-      const response = await axios.post(
-        "https://easydev.club/api/v1/auth/refresh",
-        { refreshToken },
-      );
+  try {
+    const response = await axios.post(
+      "https://easydev.club/api/v1/auth/refresh",
+      { refreshToken },
+    );
 
-      const { accessToken, refreshToken: newRefreshToken } = response.data;
-      localStorage.setItem("refreshToken", newRefreshToken);
-      dispatch(setToken({ accessToken, refreshToken: newRefreshToken }));
-    } catch {
-      localStorage.removeItem("refreshToken");
-    }
-  },
-);
+    const { accessToken, refreshToken: newRefreshToken } = response.data;
+    setAccessToken(accessToken);
+    localStorage.setItem("refreshToken", newRefreshToken);
+    return true;
+  } catch {
+    localStorage.removeItem("refreshToken");
+    return false;
+  }
+});
 export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setUser(state, action: PayloadAction<AuthState>) {
-      state.user = action.payload.user;
-      state.token = action.payload.token;
-      state.refreshToken = action.payload.refreshToken;
+    setUser(state, action: PayloadAction<Profile | null>) {
+      state.user = action.payload;
       state.isAuthenticated = true;
     },
     clearUser(state) {
       state.user = null;
-      state.token = null;
-      state.refreshToken = null;
       state.isAuthenticated = false;
-    },
-    setToken(state, action: PayloadAction<Token>) {
-      state.token = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(initialAuth.fulfilled, (state) => {
+      .addCase(initialAuth.fulfilled, (state, action) => {
         state.isInitialized = true;
+        state.isAuthenticated = action.payload;
       })
       .addCase(initialAuth.rejected, (state) => {
         state.isInitialized = true;
@@ -70,6 +60,6 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setUser, clearUser, setToken } = authSlice.actions;
+export const { setUser, clearUser } = authSlice.actions;
 
 export default authSlice.reducer;

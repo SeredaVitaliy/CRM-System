@@ -1,7 +1,6 @@
 import { memo, useState } from "react";
 import styles from "./TodoItem.module.css";
 import { deleteTodo, editTodo } from "../../api/TodoApi.ts";
-import { Todo, TodoRequest } from "../../types/types.ts";
 import {
   CheckOutlined,
   CloseOutlined,
@@ -9,6 +8,7 @@ import {
   EditOutlined,
 } from "@ant-design/icons";
 import { Form, Input, Button, Checkbox, notification } from "antd";
+import { Todo, TodoRequest } from "@/types/todo.ts";
 
 interface Props {
   todo: Todo;

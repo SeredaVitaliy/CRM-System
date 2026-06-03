@@ -1,11 +1,6 @@
-import {
-  AuthData,
-  Profile,
-  RefreshToken,
-  Token,
-  UserRegistration,
-} from "@/types/types";
+import { AuthData, RefreshToken, Token, UserRegistration } from "@/types/auth";
 import api from "./axiosInstance";
+import { Profile } from "@/types/profile";
 
 export async function registerUser(
   newUser: UserRegistration,

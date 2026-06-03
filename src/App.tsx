@@ -5,20 +5,20 @@ import { RouterProvider } from "react-router-dom";
 import ProfilePage from "./pages/ProfilePage/ProfilePage.tsx";
 import AppLayout from "./AppLayout.tsx";
 import AuthPage from "./pages/AuthPage/AuthPage.tsx";
-import LoginForm from "./components/LoginForm/LoginForm.tsx";
-import RegistrationForm from "./components/RegistrationForm/RegistrationForm.tsx";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute.tsx";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { initialAuth } from "./slices/authSlice.ts";
 import { AppDispatch, RootState } from "./store/store.ts";
+import LoginPage from "./pages/LoginPage/LoginPage.tsx";
+import RegistrationPage from "./pages/RegistrationPage/RegistrationPage.tsx";
 
 const router = createBrowserRouter([
   {
     element: <AuthPage />,
     children: [
-      { path: "/login", element: <LoginForm /> },
-      { path: "/registration", element: <RegistrationForm /> },
+      { path: "/login", element: <LoginPage /> },
+      { path: "/registration", element: <RegistrationPage /> },
     ],
   },
   {
@@ -47,7 +47,11 @@ export function App() {
     (state: RootState) => state.auth.isInitialized,
   );
 
+  const initRef = useRef(false);
+
   useEffect(() => {
+    if (initRef.current) return;
+    initRef.current = true;
     dispatch(initialAuth());
   }, [dispatch]);
 
