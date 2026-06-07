@@ -1,11 +1,7 @@
 import { clearUser } from "@/slices/authSlice";
 import { store } from "@/store/store";
 import axios from "axios";
-import {
-  clearAccessToken,
-  getAccessToken,
-  setAccessToken,
-} from "./tokenStorage";
+import { tokenManager } from "./tokenStorage";
 
 const api = axios.create({
   baseURL: "https://easydev.club/api/v1",
@@ -13,7 +9,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const token = getAccessToken();
+    const token = tokenManager.getAccessToken();
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -50,13 +46,13 @@ api.interceptors.response.use(
 
         const { accessToken } = response.data;
         const { refreshToken } = response.data;
-        setAccessToken(accessToken);
+        tokenManager.setAccessToken(accessToken);
         localStorage.setItem("refreshToken", refreshToken);
 
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return api(originalRequest);
       } catch (refreshError) {
-        clearAccessToken();
+        tokenManager.clearAccessToken();
         store.dispatch(clearUser());
         localStorage.removeItem("refreshToken");
         window.location.href = "/login";

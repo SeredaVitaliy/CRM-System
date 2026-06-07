@@ -1,4 +1,4 @@
-import { setAccessToken } from "@/api/tokenStorage";
+import { tokenManager } from "@/api/tokenStorage";
 import { Profile } from "@/types/profile";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
@@ -27,7 +27,7 @@ export const initialAuth = createAsyncThunk("auth/initial", async () => {
     );
 
     const { accessToken, refreshToken: newRefreshToken } = response.data;
-    setAccessToken(accessToken);
+    tokenManager.setAccessToken(accessToken);
     localStorage.setItem("refreshToken", newRefreshToken);
     return true;
   } catch {

@@ -1,11 +1,11 @@
 import { getUserProfile, logoutUser } from "@/api/AuthApi";
 import { Profile } from "@/types/profile";
 import { useEffect, useState } from "react";
-import { Button } from "antd";
+import { Button, Descriptions, DescriptionsProps } from "antd";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { clearUser } from "@/slices/authSlice";
-import { clearAccessToken } from "@/api/tokenStorage";
+import { tokenManager } from "@/api/tokenStorage";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<Profile | null>(null);
@@ -19,7 +19,7 @@ export default function ProfilePage() {
     } finally {
       setUser(null);
       dispatch(clearUser());
-      clearAccessToken();
+      tokenManager.clearAccessToken();
       localStorage.removeItem("refreshToken");
       navigate("/login");
     }
@@ -32,15 +32,32 @@ export default function ProfilePage() {
     }
     viewUser();
   }, []);
+
+  const items: DescriptionsProps["items"] = [
+    {
+      key: "1",
+      label: "UserName",
+      children: user?.username,
+    },
+    {
+      key: "2",
+      label: "Telephone",
+      children: user?.phoneNumber || "-",
+    },
+    {
+      key: "3",
+      label: "E-mail",
+      children: user?.email,
+    },
+  ];
   return (
     <>
-      <div>Имя пользователя: {user?.username}</div>
-      <div>Почтовый адрес: {user?.email}</div>
-      <div>Телефон: {user?.phoneNumber}</div>
-
-      <Button type="primary" onClick={handleLogout}>
-        Выход
-      </Button>
+      <Descriptions title="User Info" items={items} />
+      <div>
+        <Button type="primary" onClick={handleLogout}>
+          Выход
+        </Button>
+      </div>
     </>
   );
 }

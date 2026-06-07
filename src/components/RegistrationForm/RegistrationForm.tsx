@@ -1,4 +1,4 @@
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, notification } from "antd";
 import { FormProps } from "antd";
 import styles from "./RegistrationForm.module.css";
 import { useState } from "react";
@@ -10,32 +10,46 @@ type FieldType = {
   login?: string;
   username?: string;
   password?: string;
-  confirm?: string;
+  repeatPassword?: string;
   email?: string;
   phoneNumber?: string;
 };
+
+const FIELD_MAX_LENGTH = 60;
+const LOGIN_MIN_LENGTH = 2;
+const PASSWORD_MIN_LENGTH = 6;
+const USERNAME_MIN_LENGTH = 1;
 
 export default function RegistrationForm() {
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
+    if (
+      !values.username ||
+      !values.login ||
+      !values.password ||
+      !values.email ||
+      !values.repeatPassword
+    )
+      return;
     try {
       await registerUser({
-        username: values.username!,
-        login: values.login!,
-        password: values.password!,
+        username: values.username,
+        login: values.login,
+        password: values.password,
         phoneNumber: values.phoneNumber || "",
-        email: values.email!,
+        email: values.email,
       });
 
       setIsSuccess(true);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 409) {
         setErrorMessage("данный логин уже занят");
-      } else {
-        setErrorMessage("Ошибка! попробуйте повторить позже");
+        return;
       }
+
+      notification.error({ message: "Ошибка! попробуйте повторить позже" });
     }
   };
 
@@ -71,13 +85,19 @@ export default function RegistrationForm() {
                 pattern: /^[a-zA-Zа-яёА-ЯЁ\s]+$/,
                 message: "Вводить можно только символы латиницы или кириллицы",
               },
-              { min: 1, message: "Минимальное количество символов: 1" },
-              { max: 60, message: "Максимальное количество символов: 60" },
+              {
+                min: USERNAME_MIN_LENGTH,
+                message: `Минимальное количество символов: ${USERNAME_MIN_LENGTH}`,
+              },
+              {
+                max: FIELD_MAX_LENGTH,
+                message: `Максимальное количество символов: ${FIELD_MAX_LENGTH}`,
+              },
             ]}
           >
             <Input />
           </Form.Item>
-          <Form.Item<FieldType>
+          <Form.Item
             label="Логин"
             name="login"
             rules={[
@@ -86,8 +106,14 @@ export default function RegistrationForm() {
                 pattern: /^[a-zA-Z]+$/,
                 message: "Вводить можно только символы латиницы",
               },
-              { min: 2, message: "Минимальное количество символов: 2" },
-              { max: 60, message: "Максимальное количество символов: 60" },
+              {
+                min: LOGIN_MIN_LENGTH,
+                message: `Минимальное количество символов: ${LOGIN_MIN_LENGTH}`,
+              },
+              {
+                max: FIELD_MAX_LENGTH,
+                message: `Максимальное количество символов: ${FIELD_MAX_LENGTH}`,
+              },
             ]}
             validateStatus={errorMessage ? "error" : undefined}
             help={errorMessage || undefined}
@@ -103,8 +129,14 @@ export default function RegistrationForm() {
                 required: true,
                 message: "Пожалуйста, введите свой пароль!",
               },
-              { min: 6, message: "Минимальное количество символов: 6" },
-              { max: 60, message: "Максимальное количество символов: 60" },
+              {
+                min: PASSWORD_MIN_LENGTH,
+                message: `Минимальное количество символов: ${PASSWORD_MIN_LENGTH}`,
+              },
+              {
+                max: FIELD_MAX_LENGTH,
+                message: `Максимальное количество символов: ${FIELD_MAX_LENGTH}`,
+              },
             ]}
             hasFeedback
           >
@@ -112,7 +144,7 @@ export default function RegistrationForm() {
           </Form.Item>
 
           <Form.Item
-            name="confirm"
+            name="repeatPassword"
             label="Повторите пароль"
             dependencies={["password"]}
             hasFeedback

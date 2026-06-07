@@ -1,13 +1,27 @@
-let accessToken: string | null = null;
+class TokenManager {
+  private accessToken: string | null = null;
+  private static instance: TokenManager | null = null;
+  private constructor() {}
 
-export function getAccessToken() {
-  return accessToken;
+  public static getInstance(): TokenManager {
+    if (this.instance === null) {
+      this.instance = new TokenManager();
+    }
+
+    return this.instance;
+  }
+
+  public getAccessToken() {
+    return this.accessToken;
+  }
+
+  public setAccessToken(token: string) {
+    this.accessToken = token;
+  }
+
+  public clearAccessToken() {
+    this.accessToken = null;
+  }
 }
 
-export function setAccessToken(token: string) {
-  accessToken = token;
-}
-
-export function clearAccessToken() {
-  accessToken = null;
-}
+export const tokenManager = TokenManager.getInstance();

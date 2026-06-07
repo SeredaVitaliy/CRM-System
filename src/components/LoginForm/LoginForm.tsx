@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Form, Input, notification } from "antd";
 import { FormProps } from "antd";
 import styles from "./LoginForm.module.css";
 import { Link, useNavigate } from "react-router";
@@ -7,7 +7,7 @@ import { setUser } from "@/slices/authSlice";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import axios from "axios";
-import { setAccessToken } from "@/api/tokenStorage";
+import { tokenManager } from "@/api/tokenStorage";
 
 type FieldType = {
   login?: string;
@@ -21,21 +21,23 @@ export default function LoginForm() {
   const navigate = useNavigate();
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
+    if (!values.login || !values.password) return;
+
     try {
       const token = await authUser({
-        login: values.login!,
-        password: values.password!,
+        login: values.login,
+        password: values.password,
       });
-      setAccessToken(token.accessToken);
+      tokenManager.setAccessToken(token.accessToken);
       localStorage.setItem("refreshToken", token.refreshToken);
       dispatch(setUser(null));
       navigate("/");
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         setErrorMessage("неверный логин или пароль");
-      } else {
-        setErrorMessage("Ошибка! попробуйте повторить позже");
+        return;
       }
+      notification.error({ message: "Ошибка! попробуйте повторить позже" });
     }
   };
 
