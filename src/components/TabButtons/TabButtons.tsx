@@ -1,4 +1,4 @@
-import { TodoFilter, TodoInfo } from "../../types/types";
+import { TodoFilter, TodoInfo } from "../../types/todo";
 
 import styles from "./TabButtons.module.css";
 import { Tabs } from "antd";

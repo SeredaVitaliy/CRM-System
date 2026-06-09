@@ -25,5 +25,3 @@ export interface MetaResponse<T, N> {
 }
 
 export type TodoFilter = "all" | "inWork" | "completed";
-
-export type Variant = "primary" | "danger";

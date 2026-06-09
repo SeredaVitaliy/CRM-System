@@ -4,14 +4,14 @@ import {
   TodoFilter,
   TodoInfo,
   TodoRequest,
-} from "@/types/types";
+} from "@/types/todo";
 import api from "./axiosInstance";
 
 export async function getTodos(
   filter: TodoFilter,
 ): Promise<MetaResponse<Todo, TodoInfo>> {
   try {
-    const response = await api.get("", {
+    const response = await api.get("/todos", {
       params: { filter },
     });
 
@@ -23,7 +23,7 @@ export async function getTodos(
 
 export async function addTodo(todo: TodoRequest): Promise<Todo> {
   try {
-    const response = await api.post("", todo);
+    const response = await api.post("/todos", todo);
 
     return response.data;
   } catch (error) {
@@ -33,7 +33,7 @@ export async function addTodo(todo: TodoRequest): Promise<Todo> {
 
 export async function deleteTodo(id: number): Promise<void> {
   try {
-    await api.delete(`/${id}`);
+    await api.delete(`/todos/${id}`);
   } catch (error) {
     throw error;
   }
@@ -44,7 +44,7 @@ export async function editTodo(
   id: number,
 ): Promise<Todo> {
   try {
-    const response = await api.put(`/${id}`, editTodo);
+    const response = await api.put(`/todos/${id}`, editTodo);
 
     return response.data;
   } catch (error) {
