@@ -40,6 +40,8 @@ export default function Users() {
   const [userRole, setUserRole] = useState<User | null>(null);
   const [selectedRole, setSelectedRole] = useState<Roles[]>([]);
 
+  const [searchValue, setSearchValue] = useState<string>("");
+
   const navigate = useNavigate();
 
   useEffect(
@@ -61,6 +63,16 @@ export default function Users() {
       fetchUsers();
     },
     [filters],
+  );
+
+  useEffect(
+    function () {
+      const searchDebounce = setTimeout(() => {
+        setFilters((prev) => ({ ...prev, search: searchValue, page: 1 }));
+      }, 800);
+      return () => clearTimeout(searchDebounce);
+    },
+    [searchValue],
   );
 
   const columns = [
@@ -159,6 +171,8 @@ export default function Users() {
   ];
 
   async function handleChangeRoles() {
+    if (!userRole) return;
+
     try {
       await updateUserRights(userRole.id, { roles: selectedRole });
       setUserRole(null);
@@ -219,10 +233,8 @@ export default function Users() {
       )}
       <Input
         placeholder="Поиск по имени или email"
-        value={filters.search ?? ""}
-        onChange={(e) =>
-          setFilters({ ...filters, search: e.target.value, page: 1 })
-        }
+        value={searchValue}
+        onChange={(e) => setSearchValue(e.target.value)}
       />
       <Table
         dataSource={users}
@@ -262,6 +274,7 @@ export default function Users() {
         onCancel={() => setUserRole(null)}
         okText="сохранить"
         cancelText="отмена"
+        okButtonProps={{ disabled: selectedRole.length === 0 }}
       >
         <Select
           mode="multiple"
