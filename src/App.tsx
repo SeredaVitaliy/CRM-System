@@ -12,6 +12,8 @@ import { AppDispatch, RootState } from "./store/store.ts";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import RegistrationPage from "./pages/RegistrationPage/RegistrationPage.tsx";
 import AuthLayout from "./pages/AuthPage/AuthLayout.tsx";
+import UsersPage from "./pages/UsersPage/UsersPage.tsx";
+import UserProfilePage from "./pages/UserProfilePage/UserProfilePage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +36,14 @@ const router = createBrowserRouter([
           {
             path: "/profile",
             element: <ProfilePage />,
+          },
+          {
+            path: "/users",
+            element: <UsersPage />,
+          },
+          {
+            path: "/users/:id",
+            element: <UserProfilePage />,
           },
         ],
       },

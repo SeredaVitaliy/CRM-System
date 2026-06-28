@@ -5,6 +5,12 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { registerUser } from "@/api/AuthApi";
 import axios from "axios";
+import {
+  FIELD_MAX_LENGTH,
+  LOGIN_MIN_LENGTH,
+  PASSWORD_MIN_LENGTH,
+  USERNAME_MIN_LENGTH,
+} from "@/constants/validation";
 
 type FieldType = {
   login?: string;
@@ -14,11 +20,6 @@ type FieldType = {
   email?: string;
   phoneNumber?: string;
 };
-
-const FIELD_MAX_LENGTH = 60;
-const LOGIN_MIN_LENGTH = 2;
-const PASSWORD_MIN_LENGTH = 6;
-const USERNAME_MIN_LENGTH = 1;
 
 export default function RegistrationForm() {
   const [isSuccess, setIsSuccess] = useState<boolean>(false);

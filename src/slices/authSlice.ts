@@ -1,3 +1,4 @@
+import { getUserProfile } from "@/api/AuthApi";
 import { tokenManager } from "@/api/tokenStorage";
 import { Profile } from "@/types/profile";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
@@ -18,7 +19,7 @@ const initialState: AuthState = {
 export const initialAuth = createAsyncThunk("auth/initial", async () => {
   const refreshToken = localStorage.getItem("refreshToken");
 
-  if (!refreshToken) return false;
+  if (!refreshToken) return null;
 
   try {
     const response = await axios.post(
@@ -29,10 +30,11 @@ export const initialAuth = createAsyncThunk("auth/initial", async () => {
     const { accessToken, refreshToken: newRefreshToken } = response.data;
     tokenManager.setAccessToken(accessToken);
     localStorage.setItem("refreshToken", newRefreshToken);
-    return true;
+    const profile = await getUserProfile();
+    return profile;
   } catch {
     localStorage.removeItem("refreshToken");
-    return false;
+    return null;
   }
 });
 export const authSlice = createSlice({
@@ -52,7 +54,12 @@ export const authSlice = createSlice({
     builder
       .addCase(initialAuth.fulfilled, (state, action) => {
         state.isInitialized = true;
-        state.isAuthenticated = action.payload;
+        if (action.payload) {
+          state.user = action.payload;
+          state.isAuthenticated = true;
+        } else {
+          state.isAuthenticated = false;
+        }
       })
       .addCase(initialAuth.rejected, (state) => {
         state.isInitialized = true;

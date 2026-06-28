@@ -2,7 +2,7 @@ import { Button, Checkbox, Form, Input, notification } from "antd";
 import { FormProps } from "antd";
 import styles from "./LoginForm.module.css";
 import { Link, useNavigate } from "react-router";
-import { authUser } from "@/api/AuthApi";
+import { authUser, getUserProfile } from "@/api/AuthApi";
 import { setUser } from "@/slices/authSlice";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
@@ -30,7 +30,8 @@ export default function LoginForm() {
       });
       tokenManager.setAccessToken(token.accessToken);
       localStorage.setItem("refreshToken", token.refreshToken);
-      dispatch(setUser(null));
+      const profile = await getUserProfile();
+      dispatch(setUser(profile));
       navigate("/");
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
